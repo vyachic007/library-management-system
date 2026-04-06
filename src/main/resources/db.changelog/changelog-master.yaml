@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changeset/v1.0.0/001-create-roles.sql
+      relativeToChangelogFile: false
+
+  - include:
+      file: db/changelog/changeset/v1.0.0/002-create-users.sql
+      relativeToChangelogFile: false
+
+  - include:
+      file: db/changelog/changeset/v1.0.0/003-create-user-roles.sql
+      relativeToChangelogFile: false
+
+  - include:
+      file: db/changelog/changeset/v1.0.0/004-create-categories.sql
+      relativeToChangelogFile: false
+
+  - include:
+      file: db/changelog/changeset/v1.0.0/005-create-authors.sql
+      relativeToChangelogFile: false
+
+  - include:
+      file: db/changelog/changeset/v1.0.0/006-create-books.sql
+      relativeToChangelogFile: false
+
+  - include:
+      file: db/changelog/changeset/v1.0.0/007-create-book-authors.sql
+      relativeToChangelogFile: false
+
+  - include:
+      file: db/changelog/changeset/v1.0.0/008-create-book-copies.sql
+      relativeToChangelogFile: false
+
+  - include:
+      file: db/changelog/changeset/v1.0.0/009-create-borrow-records.sql
+      relativeToChangelogFile: false
+
+  - include:
+      file: db/changelog/changeset/v1.0.0/010-insert-roles.sql
+      relativeToChangelogFile: false

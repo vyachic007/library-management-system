@@ -1,18 +1,17 @@
 package by.slava_borisov.library.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class ReturnBookRequestDto {
+public record ReturnBookRequestDto(
 
-    private Long borrowRecordId;
-    private LocalDate returnedAt;
+        @NotNull(message = "Идентификатор записи аренды обязателен")
+        Long borrowRecordId,
+
+        @NotNull(message = "Дата возврата обязательна")
+        @PastOrPresent(message = "Дата возврата не может быть в будущем")
+        LocalDate returnedAt
+) {
 }

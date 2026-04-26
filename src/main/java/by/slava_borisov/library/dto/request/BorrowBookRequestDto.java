@@ -1,20 +1,25 @@
 package by.slava_borisov.library.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class BorrowBookRequestDto {
+public record BorrowBookRequestDto(
 
-    private Long userId;
-    private Long bookCopyId;
-    private LocalDate borrowedAt;
-    private LocalDate dueDate;
+        @NotNull(message = "Идентификатор пользователя обязателен")
+        Long userId,
+
+        @NotNull(message = "Идентификатор экземпляра книги обязателен")
+        Long bookCopyId,
+
+        @NotNull(message = "Дата выдачи обязательна")
+        @PastOrPresent(message = "Дата выдачи не может быть в будущем")
+        LocalDate borrowedAt,
+
+        @NotNull(message = "Дата возврата обязательна")
+        @Future(message = "Дата возврата должна быть в будущем")
+        LocalDate dueDate
+) {
 }

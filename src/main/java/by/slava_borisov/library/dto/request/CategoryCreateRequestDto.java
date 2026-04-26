@@ -1,16 +1,14 @@
 package by.slava_borisov.library.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class CategoryCreateRequestDto {
+public record CategoryCreateRequestDto(
 
-    private String name;
-    private Long parentId;
+        @NotBlank(message = "Название категории не должно быть пустым")
+        @Size(max = 150, message = "Название категории не должно превышать 150 символов")
+        String name,
+
+        Long parentId
+) {
 }

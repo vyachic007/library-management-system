@@ -1,17 +1,14 @@
 package by.slava_borisov.library.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class ExtendBorrowRequestDto {
+public record ExtendBorrowRequestDto(
 
-    private LocalDate newDueDate;
+        @NotNull(message = "Новая дата возврата обязательна")
+        @Future(message = "Новая дата возврата должна быть в будущем")
+        LocalDate newDueDate
+) {
 }

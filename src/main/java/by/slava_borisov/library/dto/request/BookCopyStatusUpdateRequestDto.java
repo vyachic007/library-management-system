@@ -1,15 +1,12 @@
 package by.slava_borisov.library.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class BookCopyStatusUpdateRequestDto {
+public record BookCopyStatusUpdateRequestDto(
 
-    private String status;
+        @NotBlank(message = "Статус экземпляра книги обязателен")
+        @Size(max = 30, message = "Статус не должен превышать 30 символов")
+        String status
+) {
 }

@@ -1,18 +1,25 @@
 package by.slava_borisov.library.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserUpdateRequestDto {
+public record UserUpdateRequestDto(
 
-    private String email;
-    private String firstName;
-    private String lastName;
-    private String phone;
+        @NotBlank(message = "Email не должен быть пустым")
+        @Email(message = "Email должен быть корректным")
+        @Size(max = 150, message = "Email не должен превышать 150 символов")
+        String email,
+
+        @NotBlank(message = "Имя не должно быть пустым")
+        @Size(max = 100, message = "Имя не должно превышать 100 символов")
+        String firstName,
+
+        @NotBlank(message = "Фамилия не должна быть пустой")
+        @Size(max = 100, message = "Фамилия не должна превышать 100 символов")
+        String lastName,
+
+        @Size(max = 30, message = "Телефон не должен превышать 30 символов")
+        String phone
+) {
 }

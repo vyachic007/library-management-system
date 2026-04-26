@@ -15,4 +15,10 @@ public class Messages {
     public static final String BOOK_ALREADY_EXISTS_BY_ISBN = "Книга с таким ISBN уже существует";
     public static final String BOOK_NOT_FOUND_BY_ID = "Книга с id %d не найдена";
     public static final String BOOK_NOT_FOUND_BY_ISBN = "Книга с ISBN %s не найдена";
+
+    public static final String BOOK_COPY_ALREADY_EXISTS_BY_INVENTORY_NUMBER =
+            "Экземпляр книги с таким инвентарным номером уже существует";
+    public static final String BOOK_COPY_NOT_FOUND_BY_ID = "Экземпляр книги с id %d не найден";
+    public static final String BOOK_COPY_NOT_FOUND_BY_INVENTORY_NUMBER =
+            "Экземпляр книги с инвентарным номером %s не найден";
 }

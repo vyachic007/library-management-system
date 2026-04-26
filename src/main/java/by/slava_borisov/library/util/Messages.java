@@ -29,4 +29,6 @@ public class Messages {
     public static final String NEW_DUE_DATE_BEFORE_CURRENT_DUE_DATE =
             "Новая дата возврата не может быть раньше текущего срока возврата";
     public static final String USER_NOT_FOUND_BY_ID = "Пользователь с id %d не найден";
+
+    public static final String USER_EMAIL_ALREADY_EXISTS = "Пользователь с таким email уже существует";
 }

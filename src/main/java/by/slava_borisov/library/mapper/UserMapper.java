@@ -8,6 +8,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,8 @@ public interface UserMapper {
 
     @Mapping(target = "roles", expression = "java(mapRoles(user.getRoles()))")
     UserResponseDto toResponseDto(User user);
+
+    List<UserResponseDto> toResponseDtoList(List<User> users);
 
     default Set<String> mapRoles(Set<Role> roles) {
         if (roles == null) {

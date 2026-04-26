@@ -21,4 +21,12 @@ public class Messages {
     public static final String BOOK_COPY_NOT_FOUND_BY_ID = "Экземпляр книги с id %d не найден";
     public static final String BOOK_COPY_NOT_FOUND_BY_INVENTORY_NUMBER =
             "Экземпляр книги с инвентарным номером %s не найден";
+
+    public static final String BORROW_RECORD_NOT_FOUND_BY_ID = "Запись аренды с id %d не найдена";
+    public static final String BOOK_COPY_IS_NOT_AVAILABLE = "Экземпляр книги недоступен для аренды";
+    public static final String BORROW_RECORD_ALREADY_RETURNED = "Книга по этой записи аренды уже возвращена";
+    public static final String RETURN_DATE_BEFORE_BORROW_DATE = "Дата возврата не может быть раньше даты выдачи";
+    public static final String NEW_DUE_DATE_BEFORE_CURRENT_DUE_DATE =
+            "Новая дата возврата не может быть раньше текущего срока возврата";
+    public static final String USER_NOT_FOUND_BY_ID = "Пользователь с id %d не найден";
 }

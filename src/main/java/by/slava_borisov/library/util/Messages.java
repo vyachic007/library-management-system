@@ -9,5 +9,10 @@ public class Messages {
     public static final String CATEGORY_NOT_FOUND_BY_ID = "Категория с id %d не найдена";
     public static final String CATEGORY_CANNOT_BE_PARENT_OF_ITSELF = "Категория не может быть родителем самой себя";
 
+    public static final String AUTHOR_ALREADY_EXISTS = "Автор с таким именем и фамилией уже существует";
+    public static final String AUTHOR_NOT_FOUND_BY_ID = "Автор с id %d не найден";
+
+
+
 
 }

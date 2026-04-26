@@ -10,11 +10,13 @@ import by.slava_borisov.library.service.CategoryService;
 import by.slava_borisov.library.util.Messages;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
@@ -25,7 +27,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public CategoryResponseDto create(CategoryCreateRequestDto requestDto) {
+        log.info("Создание категории: name={}, parentId={}", requestDto.name(), requestDto.parentId());
+
         if (categoryDao.existsByName(requestDto.name())) {
+            log.warn("Попытка создать категорию с уже существующим названием: name={}", requestDto.name());
             throw new IllegalArgumentException(Messages.CATEGORY_ALREADY_EXISTS);
         }
 
@@ -37,17 +42,28 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         Category savedCategory = categoryDao.save(category);
+
+        log.info("Категория успешно создана: id={}, name={}, parentId={}",
+                savedCategory.getId(),
+                savedCategory.getName(),
+                savedCategory.getParent() == null ? null : savedCategory.getParent().getId());
+
         return categoryMapper.toResponseDto(savedCategory);
     }
 
     @Override
     @Transactional
     public CategoryResponseDto update(Long categoryId, CategoryUpdateRequestDto requestDto) {
+        log.info("Обновление категории: id={}, name={}, parentId={}",
+                categoryId, requestDto.name(), requestDto.parentId());
+
         Category category = getCategoryEntityById(categoryId);
 
         categoryDao.findByName(requestDto.name())
                 .filter(existingCategory -> !existingCategory.getId().equals(categoryId))
                 .ifPresent(existingCategory -> {
+                    log.warn("Попытка обновить категорию на уже существующее название: id={}, name={}",
+                            categoryId, requestDto.name());
                     throw new IllegalArgumentException(Messages.CATEGORY_ALREADY_EXISTS);
                 });
 
@@ -57,6 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
             category.setParent(null);
         } else {
             if (requestDto.parentId().equals(categoryId)) {
+                log.warn("Попытка сделать категорию родителем самой себя: id={}", categoryId);
                 throw new IllegalArgumentException(Messages.CATEGORY_CANNOT_BE_PARENT_OF_ITSELF);
             }
 
@@ -65,46 +82,85 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         Category updatedCategory = categoryDao.update(category);
+
+        log.info("Категория успешно обновлена: id={}, name={}, parentId={}",
+                updatedCategory.getId(),
+                updatedCategory.getName(),
+                updatedCategory.getParent() == null ? null : updatedCategory.getParent().getId());
+
         return categoryMapper.toResponseDto(updatedCategory);
     }
 
     @Override
     @Transactional(readOnly = true)
     public CategoryResponseDto getById(Long categoryId) {
+        log.info("Получение категории по id={}", categoryId);
+
         Category category = getCategoryEntityById(categoryId);
+
+        log.info("Категория найдена: id={}, name={}, parentId={}",
+                category.getId(),
+                category.getName(),
+                category.getParent() == null ? null : category.getParent().getId());
+
         return categoryMapper.toResponseDto(category);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CategoryResponseDto> getAll() {
-        return categoryMapper.toResponseDtoList(categoryDao.findAll());
+        log.info("Получение списка всех категорий");
+
+        List<Category> categories = categoryDao.findAll();
+
+        log.info("Получен список всех категорий, количество={}", categories.size());
+
+        return categoryMapper.toResponseDtoList(categories);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CategoryResponseDto> getRootCategories() {
-        return categoryMapper.toResponseDtoList(categoryDao.findRootCategories());
+        log.info("Получение списка корневых категорий");
+
+        List<Category> categories = categoryDao.findRootCategories();
+
+        log.info("Получен список корневых категорий, количество={}", categories.size());
+
+        return categoryMapper.toResponseDtoList(categories);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CategoryResponseDto> getByParentId(Long parentId) {
+        log.info("Получение подкатегорий по parentId={}", parentId);
+
         getCategoryEntityById(parentId);
-        return categoryMapper.toResponseDtoList(categoryDao.findByParentId(parentId));
+        List<Category> categories = categoryDao.findByParentId(parentId);
+
+        log.info("Получены подкатегории: parentId={}, количество={}", parentId, categories.size());
+
+        return categoryMapper.toResponseDtoList(categories);
     }
 
     @Override
     @Transactional
     public void delete(Long categoryId) {
+        log.info("Удаление категории: id={}", categoryId);
+
         Category category = getCategoryEntityById(categoryId);
         categoryDao.delete(category);
+
+        log.info("Категория успешно удалена: id={}, name={}", category.getId(), category.getName());
     }
 
     private Category getCategoryEntityById(Long categoryId) {
         return categoryDao.findById(categoryId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        Messages.CATEGORY_NOT_FOUND_BY_ID.formatted(categoryId)
-                ));
+                .orElseThrow(() -> {
+                    log.warn("Категория не найдена: id={}", categoryId);
+                    return new EntityNotFoundException(
+                            Messages.CATEGORY_NOT_FOUND_BY_ID.formatted(categoryId)
+                    );
+                });
     }
 }

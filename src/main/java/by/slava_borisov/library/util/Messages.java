@@ -31,4 +31,9 @@ public class Messages {
     public static final String USER_NOT_FOUND_BY_ID = "Пользователь с id %d не найден";
 
     public static final String USER_EMAIL_ALREADY_EXISTS = "Пользователь с таким email уже существует";
+
+    public static final String USERNAME_ALREADY_EXISTS = "Пользователь с таким именем уже существует";
+    public static final String EMAIL_ALREADY_EXISTS = "Пользователь с таким email уже существует";
+    public static final String INVALID_USERNAME_OR_PASSWORD = "Неверное имя пользователя или пароль";
+    public static final String ROLE_NOT_FOUND_BY_NAME = "Роль с названием %s не найдена";
 }

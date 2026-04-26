@@ -12,7 +12,7 @@ public class Messages {
     public static final String AUTHOR_ALREADY_EXISTS = "Автор с таким именем и фамилией уже существует";
     public static final String AUTHOR_NOT_FOUND_BY_ID = "Автор с id %d не найден";
 
-
-
-
+    public static final String BOOK_ALREADY_EXISTS_BY_ISBN = "Книга с таким ISBN уже существует";
+    public static final String BOOK_NOT_FOUND_BY_ID = "Книга с id %d не найдена";
+    public static final String BOOK_NOT_FOUND_BY_ISBN = "Книга с ISBN %s не найдена";
 }

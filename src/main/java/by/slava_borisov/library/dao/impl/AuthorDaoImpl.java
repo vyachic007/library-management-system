@@ -37,7 +37,8 @@ public class AuthorDaoImpl extends AbstractDao<Author, Long> implements AuthorDa
     @Transactional(readOnly = true)
     public List<Author> findByLastName(String lastName) {
         return entityManager.createQuery(
-                        "select a from Author a where a.lastName = :lastName", Author.class)
+                        "select a from Author a where a.lastName = :lastName",
+                        Author.class)
                 .setParameter("lastName", lastName)
                 .getResultList();
     }

@@ -22,7 +22,8 @@ public class UserDaoImpl extends AbstractDao<User, Long> implements UserDao {
     public Optional<User> findByUsername(String username) {
         try {
             User user = entityManager.createQuery(
-                            "select u from User u where u.username = :username", User.class)
+                            "select u from User u where u.username = :username",
+                            User.class)
                     .setParameter("username", username)
                     .getSingleResult();
             return Optional.of(user);
@@ -36,7 +37,8 @@ public class UserDaoImpl extends AbstractDao<User, Long> implements UserDao {
     public Optional<User> findByEmail(String email) {
         try {
             User user = entityManager.createQuery(
-                            "select u from User u where u.email = :email", User.class)
+                            "select u from User u where u.email = :email",
+                            User.class)
                     .setParameter("email", email)
                     .getSingleResult();
             return Optional.of(user);
@@ -49,7 +51,8 @@ public class UserDaoImpl extends AbstractDao<User, Long> implements UserDao {
     @Transactional(readOnly = true)
     public boolean existsByUsername(String username) {
         Long count = entityManager.createQuery(
-                        "select count(u) from User u where u.username = :username", Long.class)
+                        "select count(u) from User u where u.username = :username",
+                        Long.class)
                 .setParameter("username", username)
                 .getSingleResult();
         return count > 0;
@@ -59,7 +62,8 @@ public class UserDaoImpl extends AbstractDao<User, Long> implements UserDao {
     @Transactional(readOnly = true)
     public boolean existsByEmail(String email) {
         Long count = entityManager.createQuery(
-                        "select count(u) from User u where u.email = :email", Long.class)
+                        "select count(u) from User u where u.email = :email",
+                        Long.class)
                 .setParameter("email", email)
                 .getSingleResult();
         return count > 0;
@@ -69,7 +73,8 @@ public class UserDaoImpl extends AbstractDao<User, Long> implements UserDao {
     @Transactional(readOnly = true)
     public List<User> findAllActiveUsers() {
         return entityManager.createQuery(
-                        "select u from User u where u.isActive = true", User.class)
+                        "select u from User u where u.isActive = true",
+                        User.class)
                 .getResultList();
     }
 }

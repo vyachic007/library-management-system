@@ -13,6 +13,7 @@ import by.slava_borisov.library.util.Messages;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserDao userDao;
     private final RoleDao roleDao;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -54,6 +56,7 @@ public class AuthServiceImpl implements AuthService {
                 });
 
         User user = userMapper.toEntity(requestDto);
+        user.setPassword(passwordEncoder.encode(requestDto.password()));
         user.setRoles(Set.of(userRole));
         user.setIsActive(true);
 
@@ -76,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
                     return new IllegalArgumentException(Messages.INVALID_USERNAME_OR_PASSWORD);
                 });
 
-        if (!user.getPassword().equals(requestDto.password())) {
+        if (!passwordEncoder.matches(requestDto.password(), user.getPassword())) {
             log.warn("Ошибка авторизации: неверный пароль для username={}", requestDto.username());
             throw new IllegalArgumentException(Messages.INVALID_USERNAME_OR_PASSWORD);
         }

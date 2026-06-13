@@ -3,6 +3,7 @@ package by.slava_borisov.library.dao.impl;
 import by.slava_borisov.library.dao.AbstractDao;
 import by.slava_borisov.library.dao.UserDao;
 import by.slava_borisov.library.model.User;
+import by.slava_borisov.library.util.Messages;
 import jakarta.persistence.NoResultException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

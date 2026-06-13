@@ -36,4 +36,6 @@ public class Messages {
     public static final String EMAIL_ALREADY_EXISTS = "Пользователь с таким email уже существует";
     public static final String INVALID_USERNAME_OR_PASSWORD = "Неверное имя пользователя или пароль";
     public static final String ROLE_NOT_FOUND_BY_NAME = "Роль с названием %s не найдена";
+
+    public static final String USER_IS_NOT_ACTIVE = "Пользователь неактивен";
 }

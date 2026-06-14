@@ -5,12 +5,14 @@ import by.slava_borisov.library.dao.UserDao;
 import by.slava_borisov.library.dto.request.UserLoginRequestDto;
 import by.slava_borisov.library.dto.request.UserRegistrationRequestDto;
 import by.slava_borisov.library.dto.response.UserResponseDto;
+import by.slava_borisov.library.exception.DuplicateException;
+import by.slava_borisov.library.exception.InvalidCredentialsException;
+import by.slava_borisov.library.exception.NotFoundException;
 import by.slava_borisov.library.mapper.UserMapper;
 import by.slava_borisov.library.model.Role;
 import by.slava_borisov.library.model.User;
 import by.slava_borisov.library.service.AuthService;
 import by.slava_borisov.library.util.Messages;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,18 +41,18 @@ public class AuthServiceImpl implements AuthService {
 
         if (userDao.existsByUsername(requestDto.username())) {
             log.warn("Попытка регистрации с уже занятым username={}", requestDto.username());
-            throw new IllegalArgumentException(Messages.USERNAME_ALREADY_EXISTS);
+            throw new DuplicateException(Messages.USERNAME_ALREADY_EXISTS);
         }
 
         if (userDao.existsByEmail(requestDto.email())) {
             log.warn("Попытка регистрации с уже занятым email={}", requestDto.email());
-            throw new IllegalArgumentException(Messages.EMAIL_ALREADY_EXISTS);
+            throw new DuplicateException(Messages.EMAIL_ALREADY_EXISTS);
         }
 
         Role userRole = roleDao.findByName(DEFAULT_USER_ROLE)
                 .orElseThrow(() -> {
                     log.error("Роль по умолчанию не найдена: roleName={}", DEFAULT_USER_ROLE);
-                    return new EntityNotFoundException(
+                    return new NotFoundException(
                             Messages.ROLE_NOT_FOUND_BY_NAME.formatted(DEFAULT_USER_ROLE)
                     );
                 });
@@ -76,12 +78,12 @@ public class AuthServiceImpl implements AuthService {
         User user = userDao.findByUsername(requestDto.username())
                 .orElseThrow(() -> {
                     log.warn("Ошибка авторизации: пользователь не найден, username={}", requestDto.username());
-                    return new IllegalArgumentException(Messages.INVALID_USERNAME_OR_PASSWORD);
+                    return new InvalidCredentialsException(Messages.INVALID_USERNAME_OR_PASSWORD);
                 });
 
         if (!passwordEncoder.matches(requestDto.password(), user.getPassword())) {
             log.warn("Ошибка авторизации: неверный пароль для username={}", requestDto.username());
-            throw new IllegalArgumentException(Messages.INVALID_USERNAME_OR_PASSWORD);
+            throw new InvalidCredentialsException(Messages.INVALID_USERNAME_OR_PASSWORD);
         }
 
         log.info("Пользователь успешно авторизован: id={}, username={}",

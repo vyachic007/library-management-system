@@ -4,11 +4,13 @@ import by.slava_borisov.library.dao.CategoryDao;
 import by.slava_borisov.library.dto.request.CategoryCreateRequestDto;
 import by.slava_borisov.library.dto.request.CategoryUpdateRequestDto;
 import by.slava_borisov.library.dto.response.CategoryResponseDto;
+import by.slava_borisov.library.exception.DuplicateException;
+import by.slava_borisov.library.exception.NotFoundException;
+import by.slava_borisov.library.exception.ValidationException;
 import by.slava_borisov.library.mapper.CategoryMapper;
 import by.slava_borisov.library.model.Category;
 import by.slava_borisov.library.service.CategoryService;
 import by.slava_borisov.library.util.Messages;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,7 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         if (categoryDao.existsByName(requestDto.name())) {
             log.warn("Попытка создать категорию с уже существующим названием: name={}", requestDto.name());
-            throw new IllegalArgumentException(Messages.CATEGORY_ALREADY_EXISTS);
+            throw new DuplicateException(Messages.CATEGORY_ALREADY_EXISTS);
         }
 
         Category category = categoryMapper.toEntity(requestDto);
@@ -64,7 +66,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .ifPresent(existingCategory -> {
                     log.warn("Попытка обновить категорию на уже существующее название: id={}, name={}",
                             categoryId, requestDto.name());
-                    throw new IllegalArgumentException(Messages.CATEGORY_ALREADY_EXISTS);
+                    throw new DuplicateException(Messages.CATEGORY_ALREADY_EXISTS);
                 });
 
         categoryMapper.updateEntityFromDto(requestDto, category);
@@ -74,7 +76,7 @@ public class CategoryServiceImpl implements CategoryService {
         } else {
             if (requestDto.parentId().equals(categoryId)) {
                 log.warn("Попытка сделать категорию родителем самой себя: id={}", categoryId);
-                throw new IllegalArgumentException(Messages.CATEGORY_CANNOT_BE_PARENT_OF_ITSELF);
+                throw new ValidationException(Messages.CATEGORY_CANNOT_BE_PARENT_OF_ITSELF);
             }
 
             Category parent = getCategoryEntityById(requestDto.parentId());
@@ -158,7 +160,7 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryDao.findById(categoryId)
                 .orElseThrow(() -> {
                     log.warn("Категория не найдена: id={}", categoryId);
-                    return new EntityNotFoundException(
+                    return new NotFoundException(
                             Messages.CATEGORY_NOT_FOUND_BY_ID.formatted(categoryId)
                     );
                 });

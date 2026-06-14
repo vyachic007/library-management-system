@@ -4,11 +4,12 @@ import by.slava_borisov.library.dao.AuthorDao;
 import by.slava_borisov.library.dto.request.AuthorCreateRequestDto;
 import by.slava_borisov.library.dto.request.AuthorUpdateRequestDto;
 import by.slava_borisov.library.dto.response.AuthorResponseDto;
+import by.slava_borisov.library.exception.DuplicateException;
+import by.slava_borisov.library.exception.NotFoundException;
 import by.slava_borisov.library.mapper.AuthorMapper;
 import by.slava_borisov.library.model.Author;
 import by.slava_borisov.library.service.AuthorService;
 import by.slava_borisov.library.util.Messages;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class AuthorServiceImpl implements AuthorService {
         if (authorDao.existsByFirstNameAndLastName(requestDto.firstName(), requestDto.lastName())) {
             log.warn("Попытка создать уже существующего автора: имя={}, фамилия={}",
                     requestDto.firstName(), requestDto.lastName());
-            throw new IllegalArgumentException(Messages.AUTHOR_ALREADY_EXISTS);
+            throw new DuplicateException(Messages.AUTHOR_ALREADY_EXISTS);
         }
 
         Author author = authorMapper.toEntity(requestDto);
@@ -60,7 +61,7 @@ public class AuthorServiceImpl implements AuthorService {
                 .ifPresent(existingAuthor -> {
                     log.warn("Попытка обновить автора на уже существующие данные: id={}, имя={}, фамилия={}",
                             authorId, requestDto.firstName(), requestDto.lastName());
-                    throw new IllegalArgumentException(Messages.AUTHOR_ALREADY_EXISTS);
+                    throw new DuplicateException(Messages.AUTHOR_ALREADY_EXISTS);
                 });
 
         authorMapper.updateEntityFromDto(requestDto, author);
@@ -126,7 +127,7 @@ public class AuthorServiceImpl implements AuthorService {
         return authorDao.findById(authorId)
                 .orElseThrow(() -> {
                     log.warn("Автор не найден: id={}", authorId);
-                    return new EntityNotFoundException(
+                    return new NotFoundException(
                             Messages.AUTHOR_NOT_FOUND_BY_ID.formatted(authorId)
                     );
                 });

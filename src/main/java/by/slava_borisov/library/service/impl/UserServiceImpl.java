@@ -5,13 +5,15 @@ import by.slava_borisov.library.dao.UserDao;
 import by.slava_borisov.library.dto.request.UserUpdateRequestDto;
 import by.slava_borisov.library.dto.response.BorrowRecordResponseDto;
 import by.slava_borisov.library.dto.response.UserResponseDto;
+import by.slava_borisov.library.exception.DuplicateException;
+import by.slava_borisov.library.exception.InvalidCredentialsException;
+import by.slava_borisov.library.exception.NotFoundException;
 import by.slava_borisov.library.mapper.BorrowRecordMapper;
 import by.slava_borisov.library.mapper.UserMapper;
 import by.slava_borisov.library.model.BorrowRecord;
 import by.slava_borisov.library.model.User;
 import by.slava_borisov.library.service.UserService;
 import by.slava_borisov.library.util.Messages;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -79,7 +81,7 @@ public class UserServiceImpl implements UserService {
                 .ifPresent(existingUser -> {
                     log.warn("Попытка обновить профиль на уже занятый email: userId={}, email={}",
                             userId, requestDto.email());
-                    throw new IllegalArgumentException(Messages.USER_EMAIL_ALREADY_EXISTS);
+                    throw new DuplicateException(Messages.USER_EMAIL_ALREADY_EXISTS);
                 });
 
         user.setEmail(requestDto.email());
@@ -144,7 +146,7 @@ public class UserServiceImpl implements UserService {
         return userDao.findById(userId)
                 .orElseThrow(() -> {
                     log.warn("Пользователь не найден: id={}", userId);
-                    return new EntityNotFoundException(
+                    return new NotFoundException(
                             Messages.USER_NOT_FOUND_BY_ID.formatted(userId)
                     );
                 });

@@ -9,6 +9,8 @@ import by.slava_borisov.library.dto.request.BookUpdateRequestDto;
 import by.slava_borisov.library.dto.response.BookCopyResponseDto;
 import by.slava_borisov.library.dto.response.BookDetailsResponseDto;
 import by.slava_borisov.library.dto.response.BookResponseDto;
+import by.slava_borisov.library.exception.DuplicateException;
+import by.slava_borisov.library.exception.NotFoundException;
 import by.slava_borisov.library.mapper.BookCopyMapper;
 import by.slava_borisov.library.mapper.BookMapper;
 import by.slava_borisov.library.model.Author;
@@ -16,7 +18,6 @@ import by.slava_borisov.library.model.Book;
 import by.slava_borisov.library.model.Category;
 import by.slava_borisov.library.service.BookService;
 import by.slava_borisov.library.util.Messages;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,7 @@ public class BookServiceImpl implements BookService {
 
         if (bookDao.existsByIsbn(requestDto.isbn())) {
             log.warn("Попытка создать книгу с уже существующим ISBN: isbn={}", requestDto.isbn());
-            throw new IllegalArgumentException(Messages.BOOK_ALREADY_EXISTS_BY_ISBN);
+            throw new DuplicateException(Messages.BOOK_ALREADY_EXISTS_BY_ISBN);
         }
 
         Book book = bookMapper.toEntity(requestDto);
@@ -78,7 +79,7 @@ public class BookServiceImpl implements BookService {
                 .ifPresent(existingBook -> {
                     log.warn("Попытка обновить книгу на уже существующий ISBN: id={}, isbn={}",
                             bookId, requestDto.isbn());
-                    throw new IllegalArgumentException(Messages.BOOK_ALREADY_EXISTS_BY_ISBN);
+                    throw new DuplicateException(Messages.BOOK_ALREADY_EXISTS_BY_ISBN);
                 });
 
         bookMapper.updateEntityFromDto(requestDto, book);
@@ -169,7 +170,7 @@ public class BookServiceImpl implements BookService {
         Book book = bookDao.findByIsbn(isbn)
                 .orElseThrow(() -> {
                     log.warn("Книга не найдена по ISBN={}", isbn);
-                    return new EntityNotFoundException(
+                    return new NotFoundException(
                             Messages.BOOK_NOT_FOUND_BY_ISBN.formatted(isbn)
                     );
                 });
@@ -257,7 +258,7 @@ public class BookServiceImpl implements BookService {
         return bookDao.findById(bookId)
                 .orElseThrow(() -> {
                     log.warn("Книга не найдена: id={}", bookId);
-                    return new EntityNotFoundException(
+                    return new NotFoundException(
                             Messages.BOOK_NOT_FOUND_BY_ID.formatted(bookId)
                     );
                 });
@@ -267,7 +268,7 @@ public class BookServiceImpl implements BookService {
         return categoryDao.findById(categoryId)
                 .orElseThrow(() -> {
                     log.warn("Категория не найдена: id={}", categoryId);
-                    return new EntityNotFoundException(
+                    return new NotFoundException(
                             Messages.CATEGORY_NOT_FOUND_BY_ID.formatted(categoryId)
                     );
                 });
@@ -277,7 +278,7 @@ public class BookServiceImpl implements BookService {
         return authorDao.findById(authorId)
                 .orElseThrow(() -> {
                     log.warn("Автор не найден: id={}", authorId);
-                    return new EntityNotFoundException(
+                    return new NotFoundException(
                             Messages.AUTHOR_NOT_FOUND_BY_ID.formatted(authorId)
                     );
                 });

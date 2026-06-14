@@ -1,6 +1,8 @@
 package by.slava_borisov.library.service.impl;
 
 import by.slava_borisov.library.dao.UserDao;
+import by.slava_borisov.library.exception.NotFoundException;
+import by.slava_borisov.library.exception.ValidationException;
 import by.slava_borisov.library.model.Role;
 import by.slava_borisov.library.model.User;
 import by.slava_borisov.library.util.Messages;

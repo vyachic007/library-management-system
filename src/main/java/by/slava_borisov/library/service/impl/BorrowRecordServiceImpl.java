@@ -7,6 +7,7 @@ import by.slava_borisov.library.dto.request.BorrowBookRequestDto;
 import by.slava_borisov.library.dto.request.ExtendBorrowRequestDto;
 import by.slava_borisov.library.dto.request.ReturnBookRequestDto;
 import by.slava_borisov.library.dto.response.BorrowRecordResponseDto;
+import by.slava_borisov.library.exception.IllegalBookStateException;
 import by.slava_borisov.library.mapper.BorrowRecordMapper;
 import by.slava_borisov.library.model.BookCopy;
 import by.slava_borisov.library.model.BorrowRecord;
@@ -46,7 +47,7 @@ public class BorrowRecordServiceImpl implements BorrowRecordService {
         if (!BookCopyStatus.AVAILABLE.name().equals(bookCopy.getStatus())) {
             log.warn("Попытка арендовать недоступный экземпляр книги: bookCopyId={}, текущий статус={}",
                     bookCopy.getId(), bookCopy.getStatus());
-            throw new IllegalArgumentException(Messages.BOOK_COPY_IS_NOT_AVAILABLE);
+            throw new IllegalBookStateException(Messages.BOOK_COPY_IS_NOT_AVAILABLE);
         }
 
         BorrowRecord borrowRecord = borrowRecordMapper.toEntity(requestDto);
@@ -80,13 +81,13 @@ public class BorrowRecordServiceImpl implements BorrowRecordService {
                 || BorrowRecordStatus.RETURNED.name().equals(borrowRecord.getStatus())) {
             log.warn("Попытка повторного возврата книги: borrowRecordId={}, status={}, returnedAt={}",
                     borrowRecord.getId(), borrowRecord.getStatus(), borrowRecord.getReturnedAt());
-            throw new IllegalArgumentException(Messages.BORROW_RECORD_ALREADY_RETURNED);
+            throw new IllegalBookStateException(Messages.BORROW_RECORD_ALREADY_RETURNED);
         }
 
         if (requestDto.returnedAt().isBefore(borrowRecord.getBorrowedAt())) {
             log.warn("Некорректная дата возврата: borrowRecordId={}, borrowedAt={}, returnedAt={}",
                     borrowRecord.getId(), borrowRecord.getBorrowedAt(), requestDto.returnedAt());
-            throw new IllegalArgumentException(Messages.RETURN_DATE_BEFORE_BORROW_DATE);
+            throw new IllegalBookStateException(Messages.RETURN_DATE_BEFORE_BORROW_DATE);
         }
 
         borrowRecord.setReturnedAt(requestDto.returnedAt());
@@ -118,13 +119,13 @@ public class BorrowRecordServiceImpl implements BorrowRecordService {
                 || BorrowRecordStatus.RETURNED.name().equals(borrowRecord.getStatus())) {
             log.warn("Попытка продлить уже возвращённую книгу: borrowRecordId={}, status={}, returnedAt={}",
                     borrowRecord.getId(), borrowRecord.getStatus(), borrowRecord.getReturnedAt());
-            throw new IllegalArgumentException(Messages.BORROW_RECORD_ALREADY_RETURNED);
+            throw new IllegalBookStateException(Messages.BORROW_RECORD_ALREADY_RETURNED);
         }
 
         if (requestDto.newDueDate().isBefore(borrowRecord.getDueDate())) {
             log.warn("Некорректное продление аренды: borrowRecordId={}, oldDueDate={}, newDueDate={}",
                     borrowRecord.getId(), borrowRecord.getDueDate(), requestDto.newDueDate());
-            throw new IllegalArgumentException(Messages.NEW_DUE_DATE_BEFORE_CURRENT_DUE_DATE);
+            throw new IllegalBookStateException(Messages.NEW_DUE_DATE_BEFORE_CURRENT_DUE_DATE);
         }
 
         borrowRecord.setDueDate(requestDto.newDueDate());

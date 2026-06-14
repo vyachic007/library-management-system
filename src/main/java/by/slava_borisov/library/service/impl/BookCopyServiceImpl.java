@@ -6,12 +6,13 @@ import by.slava_borisov.library.dto.request.BookCopyCreateRequestDto;
 import by.slava_borisov.library.dto.request.BookCopyStatusUpdateRequestDto;
 import by.slava_borisov.library.dto.request.BookCopyUpdateRequestDto;
 import by.slava_borisov.library.dto.response.BookCopyResponseDto;
+import by.slava_borisov.library.exception.DuplicateException;
+import by.slava_borisov.library.exception.NotFoundException;
 import by.slava_borisov.library.mapper.BookCopyMapper;
 import by.slava_borisov.library.model.Book;
 import by.slava_borisov.library.model.BookCopy;
 import by.slava_borisov.library.service.BookCopyService;
 import by.slava_borisov.library.util.Messages;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class BookCopyServiceImpl implements BookCopyService {
         if (bookCopyDao.existsByInventoryNumber(requestDto.inventoryNumber())) {
             log.warn("Попытка создать экземпляр книги с уже существующим инвентарным номером: inventoryNumber={}",
                     requestDto.inventoryNumber());
-            throw new IllegalArgumentException(Messages.BOOK_COPY_ALREADY_EXISTS_BY_INVENTORY_NUMBER);
+            throw new DuplicateException(Messages.BOOK_COPY_ALREADY_EXISTS_BY_INVENTORY_NUMBER);
         }
 
         Book book = getBookEntityById(requestDto.bookId());
@@ -69,7 +70,7 @@ public class BookCopyServiceImpl implements BookCopyService {
                 .ifPresent(existingBookCopy -> {
                     log.warn("Попытка обновить экземпляр книги на уже существующий инвентарный номер: id={}, inventoryNumber={}",
                             bookCopyId, requestDto.inventoryNumber());
-                    throw new IllegalArgumentException(Messages.BOOK_COPY_ALREADY_EXISTS_BY_INVENTORY_NUMBER);
+                    throw new DuplicateException(Messages.BOOK_COPY_ALREADY_EXISTS_BY_INVENTORY_NUMBER);
                 });
 
         Book book = getBookEntityById(requestDto.bookId());
@@ -149,7 +150,7 @@ public class BookCopyServiceImpl implements BookCopyService {
         BookCopy bookCopy = bookCopyDao.findByInventoryNumber(inventoryNumber)
                 .orElseThrow(() -> {
                     log.warn("Экземпляр книги не найден по инвентарному номеру={}", inventoryNumber);
-                    return new EntityNotFoundException(
+                    return new NotFoundException(
                             Messages.BOOK_COPY_NOT_FOUND_BY_INVENTORY_NUMBER.formatted(inventoryNumber)
                     );
                 });
@@ -208,7 +209,7 @@ public class BookCopyServiceImpl implements BookCopyService {
         return bookCopyDao.findById(bookCopyId)
                 .orElseThrow(() -> {
                     log.warn("Экземпляр книги не найден: id={}", bookCopyId);
-                    return new EntityNotFoundException(
+                    return new NotFoundException(
                             Messages.BOOK_COPY_NOT_FOUND_BY_ID.formatted(bookCopyId)
                     );
                 });
@@ -218,7 +219,7 @@ public class BookCopyServiceImpl implements BookCopyService {
         return bookDao.findById(bookId)
                 .orElseThrow(() -> {
                     log.warn("Книга не найдена: id={}", bookId);
-                    return new EntityNotFoundException(
+                    return new NotFoundException(
                             Messages.BOOK_NOT_FOUND_BY_ID.formatted(bookId)
                     );
                 });

@@ -1,10 +1,10 @@
 package by.slava_borisov.library.dto.response;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record ErrorResponseDto(
-        LocalDate timestamp,
+        LocalDateTime timestamp,
         int status,
         String error,
         String message,

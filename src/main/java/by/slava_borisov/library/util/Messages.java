@@ -40,4 +40,8 @@ public class Messages {
     public static final String USER_IS_NOT_ACTIVE = "Пользователь неактивен";
 
     public static final String VALIDATION_ERROR = "Ошибка валидации входных данных";
+
+    public static final String INVALID_REQUEST_BODY = "Некорректное тело запроса";
+
+    public static final String INTERNAL_SERVER_ERROR = "Внутренняя ошибка сервера";
 }

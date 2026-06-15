@@ -5,6 +5,7 @@ import by.slava_borisov.library.dto.response.FieldErrorResponseDto;
 import by.slava_borisov.library.util.Messages;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -88,6 +89,30 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponseDto> handleHttpMessageNotReadableException(
+            HttpMessageNotReadableException ex,
+            WebRequest request
+    ) {
+        return buildResponse(
+                HttpStatus.BAD_REQUEST,
+                Messages.INVALID_REQUEST_BODY,
+                request
+        );
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponseDto> handleException(
+            Exception ex,
+            WebRequest request
+    ) {
+        return buildResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                Messages.INTERNAL_SERVER_ERROR,
+                request
+        );
     }
 
     private ResponseEntity<ErrorResponseDto> buildResponse(

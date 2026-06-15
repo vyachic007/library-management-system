@@ -38,4 +38,6 @@ public class Messages {
     public static final String ROLE_NOT_FOUND_BY_NAME = "Роль с названием %s не найдена";
 
     public static final String USER_IS_NOT_ACTIVE = "Пользователь неактивен";
+
+    public static final String VALIDATION_ERROR = "Ошибка валидации входных данных";
 }

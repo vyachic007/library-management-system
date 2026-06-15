@@ -1,8 +1,11 @@
 package by.slava_borisov.library.exception;
 
 import by.slava_borisov.library.dto.response.ErrorResponseDto;
+import by.slava_borisov.library.dto.response.FieldErrorResponseDto;
+import by.slava_borisov.library.util.Messages;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -59,6 +62,32 @@ public class GlobalExceptionHandler {
             WebRequest request
     ) {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponseDto> handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException ex,
+            WebRequest request
+    ) {
+        List<FieldErrorResponseDto> fieldErrors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> new FieldErrorResponseDto(
+                        error.getField(),
+                        error.getDefaultMessage()
+                ))
+                .toList();
+
+        ErrorResponseDto errorResponse = new ErrorResponseDto(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.name(),
+                Messages.VALIDATION_ERROR,
+                request.getDescription(false).replace("uri=", ""),
+                fieldErrors
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<ErrorResponseDto> buildResponse(

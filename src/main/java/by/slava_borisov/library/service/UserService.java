@@ -21,4 +21,8 @@ public interface UserService {
     List<BorrowRecordResponseDto> getBorrowHistory(Long userId);
 
     List<BorrowRecordResponseDto> getOverdueBorrows(Long userId);
+
+    void delete(Long userId);
+
+    UserResponseDto getProfile(Long userId);
 }

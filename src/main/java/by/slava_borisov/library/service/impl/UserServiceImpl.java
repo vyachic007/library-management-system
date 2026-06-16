@@ -6,7 +6,6 @@ import by.slava_borisov.library.dto.request.UserUpdateRequestDto;
 import by.slava_borisov.library.dto.response.BorrowRecordResponseDto;
 import by.slava_borisov.library.dto.response.UserResponseDto;
 import by.slava_borisov.library.exception.DuplicateException;
-import by.slava_borisov.library.exception.InvalidCredentialsException;
 import by.slava_borisov.library.exception.NotFoundException;
 import by.slava_borisov.library.mapper.BorrowRecordMapper;
 import by.slava_borisov.library.mapper.UserMapper;
@@ -140,6 +139,28 @@ public class UserServiceImpl implements UserService {
                 userId, overdueRecords.size());
 
         return borrowRecordMapper.toResponseDtoList(overdueRecords);
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long userId) {
+        log.info("Удаление пользователя с id={}", userId);
+
+        User user = getUserEntityById(userId);
+        user.setIsActive(false);
+
+        userDao.update(user);
+
+        log.info("Пользователь успешно деактивирован: userId={}", userId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserResponseDto getProfile(Long userId) {
+        log.info("Получение профиля пользователя: userId={}", userId);
+
+        User user = getUserEntityById(userId);
+        return userMapper.toResponseDto(user);
     }
 
     private User getUserEntityById(Long userId) {

@@ -37,6 +37,11 @@ public class UserController {
         return userService.getAll();
     }
 
+    @GetMapping("/active")
+    public List<UserResponseDto> getAllActiveUsers() {
+        return userService.getAllActiveUsers();
+    }
+
     @GetMapping("/{userId}")
     public UserResponseDto getUserById(
             @PathVariable Long userId

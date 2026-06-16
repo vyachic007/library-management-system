@@ -254,6 +254,27 @@ public class BookServiceImpl implements BookService {
                 book.getId(), book.getTitle(), book.getIsbn());
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<BookResponseDto> search(
+            String title,
+            String author,
+            Long categoryId,
+            String isbn
+    ) {
+        log.info("Поиск книг: title={}, author={}, categoryId={}, isbn={}",
+                title, author, categoryId, isbn);
+
+        List<BookResponseDto> books = bookDao.search(title, author, categoryId, isbn)
+                .stream()
+                .map(bookMapper::toResponseDto)
+                .toList();
+
+        log.info("Поиск книг завершён: найдено={}", books.size());
+
+        return books;
+    }
+
     private Book getBookEntityById(Long bookId) {
         return bookDao.findById(bookId)
                 .orElseThrow(() -> {

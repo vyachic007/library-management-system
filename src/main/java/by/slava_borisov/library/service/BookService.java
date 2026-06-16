@@ -35,4 +35,11 @@ public interface BookService {
     List<BookCopyResponseDto> getAvailableCopies(Long bookId);
 
     void delete(Long bookId);
+
+    List<BookResponseDto> search(
+            String title,
+            String author,
+            Long categoryId,
+            String isbn
+    );
 }

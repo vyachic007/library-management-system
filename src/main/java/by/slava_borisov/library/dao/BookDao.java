@@ -28,4 +28,11 @@ public interface BookDao {
     List<Book> findByCategoryId(Long categoryId);
 
     List<Book> findByAuthorId(Long authorId);
+
+    List<Book> search(
+            String title,
+            String author,
+            Long categoryId,
+            String isbn
+    );
 }

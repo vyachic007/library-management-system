@@ -69,4 +69,27 @@ public class BookDaoImpl extends AbstractDao<Book, Long> implements BookDao {
                 .setParameter("authorId", authorId)
                 .getResultList();
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Book> search(
+            String title,
+            String author,
+            Long categoryId,
+            String isbn
+    ) {
+        return entityManager.createQuery("""
+                    select distinct b from Book b
+                    left join b.authors a
+                    where (:title is null or lower(b.title) like lower(concat('%', :title, '%')))
+                      and (:author is null or lower(a.lastName) like lower(concat('%', :author, '%')))
+                      and (:categoryId is null or b.category.id = :categoryId)
+                      and (:isbn is null or lower(b.isbn) like lower(concat('%', :isbn, '%')))
+                    """, Book.class)
+                .setParameter("title", title)
+                .setParameter("author", author)
+                .setParameter("categoryId", categoryId)
+                .setParameter("isbn", isbn)
+                .getResultList();
+    }
 }

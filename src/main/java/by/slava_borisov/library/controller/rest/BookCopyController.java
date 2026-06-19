@@ -32,11 +32,18 @@ public class BookCopyController {
         return bookCopyService.getAll();
     }
 
-    @GetMapping("/{copyId}")
-    public BookCopyResponseDto getBookCopyById(
-            @PathVariable Long copyId
+    @GetMapping("/status/{status}")
+    public List<BookCopyResponseDto> getBookCopiesByStatus(
+            @PathVariable String status
     ) {
-        return bookCopyService.getById(copyId);
+        return bookCopyService.getByStatus(status);
+    }
+
+    @GetMapping("/inventory/{inventoryNumber}")
+    public BookCopyResponseDto getBookCopyByInventoryNumber(
+            @PathVariable String inventoryNumber
+    ) {
+        return bookCopyService.getByInventoryNumber(inventoryNumber);
     }
 
     @GetMapping("/book/{bookId}")
@@ -51,6 +58,13 @@ public class BookCopyController {
             @PathVariable Long bookId
     ) {
         return bookCopyService.getAvailableByBookId(bookId);
+    }
+
+    @GetMapping("/{copyId}")
+    public BookCopyResponseDto getBookCopyById(
+            @PathVariable Long copyId
+    ) {
+        return bookCopyService.getById(copyId);
     }
 
     @PutMapping("/{copyId}")

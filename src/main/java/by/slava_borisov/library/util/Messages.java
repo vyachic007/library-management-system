@@ -37,11 +37,13 @@ public class Messages {
     public static final String INVALID_USERNAME_OR_PASSWORD = "Неверное имя пользователя или пароль";
     public static final String ROLE_NOT_FOUND_BY_NAME = "Роль с названием %s не найдена";
 
-    public static final String USER_IS_NOT_ACTIVE = "Пользователь неактивен";
+    public static final String USER_NOT_FOUND = "Пользователь не найден";
 
     public static final String VALIDATION_ERROR = "Ошибка валидации входных данных";
 
     public static final String INVALID_REQUEST_BODY = "Некорректное тело запроса";
 
     public static final String INTERNAL_SERVER_ERROR = "Внутренняя ошибка сервера";
+
+    public static final String ACCESS_DENIED = "Недостаточно прав для выполнения операции";
 }

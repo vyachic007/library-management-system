@@ -3,13 +3,11 @@ package by.slava_borisov.library.service.impl;
 import by.slava_borisov.library.dao.BorrowRecordDao;
 import by.slava_borisov.library.dao.UserDao;
 import by.slava_borisov.library.dto.request.UserUpdateRequestDto;
-import by.slava_borisov.library.dto.response.BorrowRecordResponseDto;
 import by.slava_borisov.library.dto.response.UserResponseDto;
 import by.slava_borisov.library.exception.DuplicateException;
 import by.slava_borisov.library.exception.NotFoundException;
 import by.slava_borisov.library.mapper.BorrowRecordMapper;
 import by.slava_borisov.library.mapper.UserMapper;
-import by.slava_borisov.library.model.BorrowRecord;
 import by.slava_borisov.library.model.User;
 import by.slava_borisov.library.service.UserService;
 import by.slava_borisov.library.util.Messages;
@@ -18,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -94,51 +91,6 @@ public class UserServiceImpl implements UserService {
                 updatedUser.getId(), updatedUser.getUsername(), updatedUser.getEmail());
 
         return userMapper.toResponseDto(updatedUser);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<BorrowRecordResponseDto> getCurrentBorrows(Long userId) {
-        log.info("Получение текущих аренд пользователя: userId={}", userId);
-
-        getUserEntityById(userId);
-        List<BorrowRecord> borrowRecords = borrowRecordDao.findActiveByUserId(userId);
-
-        log.info("Получены текущие аренды пользователя: userId={}, количество={}",
-                userId, borrowRecords.size());
-
-        return borrowRecordMapper.toResponseDtoList(borrowRecords);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<BorrowRecordResponseDto> getBorrowHistory(Long userId) {
-        log.info("Получение истории аренды пользователя: userId={}", userId);
-
-        getUserEntityById(userId);
-        List<BorrowRecord> borrowRecords = borrowRecordDao.findByUserId(userId);
-
-        log.info("Получена история аренды пользователя: userId={}, количество={}",
-                userId, borrowRecords.size());
-
-        return borrowRecordMapper.toResponseDtoList(borrowRecords);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<BorrowRecordResponseDto> getOverdueBorrows(Long userId) {
-        log.info("Получение просроченных аренд пользователя: userId={}", userId);
-
-        getUserEntityById(userId);
-
-        List<BorrowRecord> overdueRecords = borrowRecordDao.findOverdueRecords(LocalDate.now()).stream()
-                .filter(borrowRecord -> borrowRecord.getUser().getId().equals(userId))
-                .toList();
-
-        log.info("Получены просроченные аренды пользователя: userId={}, количество={}",
-                userId, overdueRecords.size());
-
-        return borrowRecordMapper.toResponseDtoList(overdueRecords);
     }
 
     @Override

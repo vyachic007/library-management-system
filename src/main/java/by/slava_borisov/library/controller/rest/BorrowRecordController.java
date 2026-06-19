@@ -42,13 +42,6 @@ public class BorrowRecordController {
         return borrowRecordService.extendBorrowPeriod(recordId, request);
     }
 
-    @GetMapping("/{recordId}")
-    public BorrowRecordResponseDto getBorrowRecordById(
-            @PathVariable Long recordId
-    ) {
-        return borrowRecordService.getById(recordId);
-    }
-
     @GetMapping
     public List<BorrowRecordResponseDto> getAllBorrowRecords() {
         return borrowRecordService.getAll();
@@ -104,5 +97,12 @@ public class BorrowRecordController {
             @PathVariable Long copyId
     ) {
         return borrowRecordService.getBorrowHistoryByBookCopyId(copyId);
+    }
+
+    @GetMapping("/{recordId}")
+    public BorrowRecordResponseDto getBorrowRecordById(
+            @PathVariable Long recordId
+    ) {
+        return borrowRecordService.getById(recordId);
     }
 }

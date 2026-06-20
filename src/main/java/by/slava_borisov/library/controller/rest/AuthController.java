@@ -2,7 +2,7 @@ package by.slava_borisov.library.controller.rest;
 
 import by.slava_borisov.library.dto.request.UserLoginRequestDto;
 import by.slava_borisov.library.dto.request.UserRegistrationRequestDto;
-import by.slava_borisov.library.dto.response.UserResponseDto;
+import by.slava_borisov.library.dto.response.JwtAuthResponseDto;
 import by.slava_borisov.library.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public UserResponseDto login(
+    public JwtAuthResponseDto login(
             @Valid @RequestBody UserLoginRequestDto request
     ) {
         return authService.login(request);
@@ -25,7 +25,7 @@ public class AuthController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/register")
-    public UserResponseDto register(
+    public JwtAuthResponseDto register(
             @Valid @RequestBody UserRegistrationRequestDto request
     ) {
         return authService.register(request);

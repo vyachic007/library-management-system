@@ -4,17 +4,24 @@ import by.slava_borisov.library.dao.RoleDao;
 import by.slava_borisov.library.dao.UserDao;
 import by.slava_borisov.library.dto.request.UserLoginRequestDto;
 import by.slava_borisov.library.dto.request.UserRegistrationRequestDto;
-import by.slava_borisov.library.dto.response.UserResponseDto;
+import by.slava_borisov.library.dto.response.JwtAuthResponseDto;
 import by.slava_borisov.library.exception.DuplicateException;
 import by.slava_borisov.library.exception.InvalidCredentialsException;
 import by.slava_borisov.library.exception.NotFoundException;
 import by.slava_borisov.library.mapper.UserMapper;
 import by.slava_borisov.library.model.Role;
 import by.slava_borisov.library.model.User;
+import by.slava_borisov.library.security.JwtTokenProvider;
 import by.slava_borisov.library.service.AuthService;
 import by.slava_borisov.library.util.Messages;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,10 +39,13 @@ public class AuthServiceImpl implements AuthService {
     private final RoleDao roleDao;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserDetailsService userDetailsService;
 
     @Override
     @Transactional
-    public UserResponseDto register(UserRegistrationRequestDto requestDto) {
+    public JwtAuthResponseDto register(UserRegistrationRequestDto requestDto) {
         log.info("Регистрация пользователя: username={}, email={}",
                 requestDto.username(), requestDto.email());
 
@@ -64,31 +74,53 @@ public class AuthServiceImpl implements AuthService {
 
         User savedUser = userDao.save(user);
 
+        UserDetails userDetails = userDetailsService.loadUserByUsername(savedUser.getUsername());
+        String token = jwtTokenProvider.generateToken(userDetails, savedUser.getId());
+
         log.info("Пользователь успешно зарегистрирован: id={}, username={}, email={}",
                 savedUser.getId(), savedUser.getUsername(), savedUser.getEmail());
 
-        return userMapper.toResponseDto(savedUser);
+        return new JwtAuthResponseDto(
+                "Bearer",
+                token,
+                userMapper.toResponseDto(savedUser)
+        );
     }
 
     @Override
     @Transactional(readOnly = true)
-    public UserResponseDto login(UserLoginRequestDto requestDto) {
+    public JwtAuthResponseDto login(UserLoginRequestDto requestDto) {
         log.info("Попытка авторизации пользователя: username={}", requestDto.username());
 
-        User user = userDao.findByUsername(requestDto.username())
-                .orElseThrow(() -> {
-                    log.warn("Ошибка авторизации: пользователь не найден, username={}", requestDto.username());
-                    return new InvalidCredentialsException(Messages.INVALID_USERNAME_OR_PASSWORD);
-                });
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            requestDto.username(),
+                            requestDto.password()
+                    )
+            );
 
-        if (!passwordEncoder.matches(requestDto.password(), user.getPassword())) {
-            log.warn("Ошибка авторизации: неверный пароль для username={}", requestDto.username());
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+            User user = userDao.findByUsername(userDetails.getUsername())
+                    .orElseThrow(() -> {
+                        log.warn("Ошибка авторизации: пользователь не найден, username={}", requestDto.username());
+                        return new InvalidCredentialsException(Messages.INVALID_USERNAME_OR_PASSWORD);
+                    });
+
+            String token = jwtTokenProvider.generateToken(userDetails, user.getId());
+
+            log.info("Пользователь успешно авторизован: id={}, username={}",
+                    user.getId(), user.getUsername());
+
+            return new JwtAuthResponseDto(
+                    "Bearer",
+                    token,
+                    userMapper.toResponseDto(user)
+            );
+        } catch (AuthenticationException ex) {
+            log.warn("Ошибка авторизации: неверный username или password, username={}", requestDto.username());
             throw new InvalidCredentialsException(Messages.INVALID_USERNAME_OR_PASSWORD);
         }
-
-        log.info("Пользователь успешно авторизован: id={}, username={}",
-                user.getId(), user.getUsername());
-
-        return userMapper.toResponseDto(user);
     }
 }

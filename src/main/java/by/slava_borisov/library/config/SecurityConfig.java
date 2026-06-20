@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -56,37 +58,37 @@ public class SecurityConfig {
                 )
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(antMatcher("/api/auth/**")).permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/api/books/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/books/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/books/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/books/**").hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/books/**")).hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/books/**")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.PUT, "/api/books/**")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.DELETE, "/api/books/**")).hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.GET, "/api/authors/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/authors/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/authors/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/authors/**").hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/authors/**")).hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/authors/**")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.PUT, "/api/authors/**")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.DELETE, "/api/authors/**")).hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.GET, "/api/categories/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/categories/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/categories/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/categories/**").hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/categories/**")).hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/categories/**")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.PUT, "/api/categories/**")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.DELETE, "/api/categories/**")).hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.GET, "/api/book-copies/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/book-copies/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/book-copies/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/api/book-copies/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/book-copies/**").hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/book-copies/**")).hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/book-copies/**")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.PUT, "/api/book-copies/**")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.PATCH, "/api/book-copies/**")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.DELETE, "/api/book-copies/**")).hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.GET, "/api/users/*/profile").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/users/*/profile").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/users/**").hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/users/*/profile")).hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.PUT, "/api/users/*/profile")).hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(antMatcher("/api/users/**")).hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.GET, "/api/borrow-records").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/borrow-records/active").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/borrow-records/overdue").hasRole("ADMIN")
-                        .requestMatchers("/api/borrow-records/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/borrow-records")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/borrow-records/active")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/borrow-records/overdue")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher("/api/borrow-records/**")).hasAnyRole("USER", "ADMIN")
 
                         .anyRequest().authenticated()
                 )

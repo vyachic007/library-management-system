@@ -60,8 +60,12 @@ public class JwtTokenProvider {
     }
 
     public boolean isTokenValid(String token) {
-        getClaims(token);
-        return true;
+        try {
+            getClaims(token);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
     private Claims getClaims(String token) {

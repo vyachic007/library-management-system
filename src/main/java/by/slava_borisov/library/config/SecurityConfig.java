@@ -100,7 +100,14 @@ public class SecurityConfig {
                         .requestMatchers(antMatcher(HttpMethod.GET, "/api/borrow-records")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.GET, "/api/borrow-records/active")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.GET, "/api/borrow-records/overdue")).hasRole("ADMIN")
-                        .requestMatchers(antMatcher("/api/borrow-records/**")).hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/borrow-records/book-copy/**")).hasRole("ADMIN")
+
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/borrow-records/user/**")).hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/borrow-records/*")).hasAnyRole("USER", "ADMIN")
+
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/borrow-records/rent")).hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/borrow-records/return")).hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/borrow-records/*/extend")).hasAnyRole("USER", "ADMIN")
 
                         .anyRequest().authenticated()
                 )

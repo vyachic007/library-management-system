@@ -34,42 +34,42 @@ public class BookCopyController {
 
     @GetMapping("/status/{status}")
     public List<BookCopyResponseDto> getBookCopiesByStatus(
-            @PathVariable String status
+            @PathVariable("status") String status
     ) {
         return bookCopyService.getByStatus(status);
     }
 
     @GetMapping("/inventory/{inventoryNumber}")
     public BookCopyResponseDto getBookCopyByInventoryNumber(
-            @PathVariable String inventoryNumber
+            @PathVariable("inventoryNumber") String inventoryNumber
     ) {
         return bookCopyService.getByInventoryNumber(inventoryNumber);
     }
 
     @GetMapping("/book/{bookId}")
     public List<BookCopyResponseDto> getBookCopiesByBookId(
-            @PathVariable Long bookId
+            @PathVariable("bookId") Long bookId
     ) {
         return bookCopyService.getByBookId(bookId);
     }
 
     @GetMapping("/book/{bookId}/available")
     public List<BookCopyResponseDto> getAvailableBookCopiesByBookId(
-            @PathVariable Long bookId
+            @PathVariable("bookId") Long bookId
     ) {
         return bookCopyService.getAvailableByBookId(bookId);
     }
 
     @GetMapping("/{copyId}")
     public BookCopyResponseDto getBookCopyById(
-            @PathVariable Long copyId
+            @PathVariable("copyId") Long copyId
     ) {
         return bookCopyService.getById(copyId);
     }
 
     @PutMapping("/{copyId}")
     public BookCopyResponseDto updateBookCopy(
-            @PathVariable Long copyId,
+            @PathVariable("copyId") Long copyId,
             @Valid @RequestBody BookCopyUpdateRequestDto request
     ) {
         return bookCopyService.update(copyId, request);
@@ -77,7 +77,7 @@ public class BookCopyController {
 
     @PatchMapping("/{copyId}/status")
     public BookCopyResponseDto changeBookCopyStatus(
-            @PathVariable Long copyId,
+            @PathVariable("copyId") Long copyId,
             @Valid @RequestBody BookCopyStatusUpdateRequestDto request
     ) {
         return bookCopyService.changeStatus(copyId, request);
@@ -86,7 +86,7 @@ public class BookCopyController {
     @DeleteMapping("/{copyId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeBookCopyById(
-            @PathVariable Long copyId
+            @PathVariable("copyId") Long copyId
     ) {
         bookCopyService.delete(copyId);
     }

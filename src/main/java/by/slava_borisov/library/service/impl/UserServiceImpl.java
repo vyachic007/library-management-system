@@ -1,14 +1,13 @@
 package by.slava_borisov.library.service.impl;
 
-import by.slava_borisov.library.dao.BorrowRecordDao;
 import by.slava_borisov.library.dao.UserDao;
 import by.slava_borisov.library.dto.request.UserUpdateRequestDto;
 import by.slava_borisov.library.dto.response.UserResponseDto;
 import by.slava_borisov.library.exception.DuplicateException;
 import by.slava_borisov.library.exception.NotFoundException;
-import by.slava_borisov.library.mapper.BorrowRecordMapper;
 import by.slava_borisov.library.mapper.UserMapper;
 import by.slava_borisov.library.model.User;
+import by.slava_borisov.library.service.AccessControlService;
 import by.slava_borisov.library.service.UserService;
 import by.slava_borisov.library.util.Messages;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +23,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
-    private final BorrowRecordDao borrowRecordDao;
     private final UserMapper userMapper;
-    private final BorrowRecordMapper borrowRecordMapper;
+    private final AccessControlService accessControlService;
 
     @Override
     @Transactional(readOnly = true)
@@ -70,6 +68,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto updateProfile(Long userId, UserUpdateRequestDto requestDto) {
         log.info("Обновление профиля пользователя: id={}, email={}", userId, requestDto.email());
 
+        accessControlService.checkUserAccess(userId);
         User user = getUserEntityById(userId);
 
         userDao.findByEmail(requestDto.email())
@@ -110,6 +109,8 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public UserResponseDto getProfile(Long userId) {
         log.info("Получение профиля пользователя: userId={}", userId);
+
+        accessControlService.checkUserAccess(userId);
 
         User user = getUserEntityById(userId);
         return userMapper.toResponseDto(user);

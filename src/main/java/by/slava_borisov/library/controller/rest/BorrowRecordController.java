@@ -36,7 +36,7 @@ public class BorrowRecordController {
 
     @PostMapping("/{recordId}/extend")
     public BorrowRecordResponseDto extendBorrowPeriod(
-            @PathVariable Long recordId,
+            @PathVariable("recordId") Long recordId,
             @Valid @RequestBody ExtendBorrowRequestDto request
     ) {
         return borrowRecordService.extendBorrowPeriod(recordId, request);
@@ -59,49 +59,49 @@ public class BorrowRecordController {
 
     @GetMapping("/user/{userId}")
     public List<BorrowRecordResponseDto> getBorrowRecordsByUserId(
-            @PathVariable Long userId
+            @PathVariable("userId") Long userId
     ) {
         return borrowRecordService.getByUserId(userId);
     }
 
     @GetMapping("/user/{userId}/current")
     public List<BorrowRecordResponseDto> getCurrentBorrowsByUserId(
-            @PathVariable Long userId
+            @PathVariable("userId") Long userId
     ) {
         return borrowRecordService.getCurrentBorrowsByUserId(userId);
     }
 
     @GetMapping("/user/{userId}/history")
     public List<BorrowRecordResponseDto> getBorrowHistoryByUserId(
-            @PathVariable Long userId
+            @PathVariable("userId") Long userId
     ) {
         return borrowRecordService.getBorrowHistoryByUserId(userId);
     }
 
     @GetMapping("/user/{userId}/overdue")
     public List<BorrowRecordResponseDto> getOverdueBorrowsByUserId(
-            @PathVariable Long userId
+            @PathVariable("userId") Long userId
     ) {
         return borrowRecordService.getOverdueBorrowsByUserId(userId);
     }
 
     @GetMapping("/book-copy/{copyId}")
     public List<BorrowRecordResponseDto> getBorrowRecordsByBookCopyId(
-            @PathVariable Long copyId
+            @PathVariable("copyId") Long copyId
     ) {
         return borrowRecordService.getByBookCopyId(copyId);
     }
 
     @GetMapping("/book-copy/{copyId}/history")
     public List<BorrowRecordResponseDto> getBorrowHistoryByBookCopyId(
-            @PathVariable Long copyId
+            @PathVariable("copyId") Long copyId
     ) {
         return borrowRecordService.getBorrowHistoryByBookCopyId(copyId);
     }
 
     @GetMapping("/{recordId}")
     public BorrowRecordResponseDto getBorrowRecordById(
-            @PathVariable Long recordId
+            @PathVariable("recordId") Long recordId
     ) {
         return borrowRecordService.getById(recordId);
     }

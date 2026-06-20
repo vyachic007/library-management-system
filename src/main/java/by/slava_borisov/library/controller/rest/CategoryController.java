@@ -28,7 +28,7 @@ public class CategoryController {
 
     @PutMapping("/{categoryId}")
     public CategoryResponseDto updateCategory(
-            @PathVariable Long categoryId,
+            @PathVariable("categoryId") Long categoryId,
             @Valid @RequestBody CategoryUpdateRequestDto request
     ) {
         return categoryService.update(categoryId, request);
@@ -46,14 +46,14 @@ public class CategoryController {
 
     @GetMapping("/{parentId}/subcategories")
     public List<CategoryResponseDto> getSubcategoriesByParentId(
-            @PathVariable Long parentId
+            @PathVariable("parentId") Long parentId
     ) {
         return categoryService.getByParentId(parentId);
     }
 
     @GetMapping("/{categoryId}")
     public CategoryResponseDto getCategoryById(
-            @PathVariable Long categoryId
+            @PathVariable("categoryId") Long categoryId
     ) {
         return categoryService.getById(categoryId);
     }
@@ -61,7 +61,7 @@ public class CategoryController {
     @DeleteMapping("/{categoryId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeCategoryById(
-            @PathVariable Long categoryId
+            @PathVariable("categoryId") Long categoryId
     ) {
         categoryService.delete(categoryId);
     }

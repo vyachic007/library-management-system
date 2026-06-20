@@ -14,6 +14,7 @@ import by.slava_borisov.library.model.BorrowRecord;
 import by.slava_borisov.library.model.User;
 import by.slava_borisov.library.model.enums.BookCopyStatus;
 import by.slava_borisov.library.model.enums.BorrowRecordStatus;
+import by.slava_borisov.library.service.AccessControlService;
 import by.slava_borisov.library.service.BorrowRecordService;
 import by.slava_borisov.library.util.Messages;
 import jakarta.persistence.EntityNotFoundException;
@@ -34,12 +35,15 @@ public class BorrowRecordServiceImpl implements BorrowRecordService {
     private final UserDao userDao;
     private final BookCopyDao bookCopyDao;
     private final BorrowRecordMapper borrowRecordMapper;
+    private final AccessControlService accessControlService;
 
     @Override
     @Transactional
     public BorrowRecordResponseDto borrowBook(BorrowBookRequestDto requestDto) {
         log.info("Оформление аренды книги: userId={}, bookCopyId={}, borrowedAt={}, dueDate={}",
                 requestDto.userId(), requestDto.bookCopyId(), requestDto.borrowedAt(), requestDto.dueDate());
+
+        accessControlService.checkUserAccess(requestDto.userId());
 
         User user = getUserEntityById(requestDto.userId());
         BookCopy bookCopy = getBookCopyEntityById(requestDto.bookCopyId());
@@ -76,6 +80,8 @@ public class BorrowRecordServiceImpl implements BorrowRecordService {
                 requestDto.borrowRecordId(), requestDto.returnedAt());
 
         BorrowRecord borrowRecord = getBorrowRecordEntityById(requestDto.borrowRecordId());
+
+        accessControlService.checkUserAccess(borrowRecord.getUser().getId());
 
         if (borrowRecord.getReturnedAt() != null
                 || BorrowRecordStatus.RETURNED.name().equals(borrowRecord.getStatus())) {
@@ -115,6 +121,8 @@ public class BorrowRecordServiceImpl implements BorrowRecordService {
 
         BorrowRecord borrowRecord = getBorrowRecordEntityById(borrowRecordId);
 
+        accessControlService.checkUserAccess(borrowRecord.getUser().getId());
+
         if (borrowRecord.getReturnedAt() != null
                 || BorrowRecordStatus.RETURNED.name().equals(borrowRecord.getStatus())) {
             log.warn("Попытка продлить уже возвращённую книгу: borrowRecordId={}, status={}, returnedAt={}",
@@ -144,6 +152,8 @@ public class BorrowRecordServiceImpl implements BorrowRecordService {
         log.info("Получение записи аренды по id={}", borrowRecordId);
 
         BorrowRecord borrowRecord = getBorrowRecordEntityById(borrowRecordId);
+
+        accessControlService.checkUserAccess(borrowRecord.getUser().getId());
 
         log.info("Запись аренды найдена: id={}, userId={}, bookCopyId={}, status={}",
                 borrowRecord.getId(),
@@ -195,6 +205,8 @@ public class BorrowRecordServiceImpl implements BorrowRecordService {
     public List<BorrowRecordResponseDto> getByUserId(Long userId) {
         log.info("Получение записей аренды пользователя: userId={}", userId);
 
+        accessControlService.checkUserAccess(userId);
+
         getUserEntityById(userId);
         List<BorrowRecord> borrowRecords = borrowRecordDao.findByUserId(userId);
 
@@ -207,6 +219,8 @@ public class BorrowRecordServiceImpl implements BorrowRecordService {
     @Transactional(readOnly = true)
     public List<BorrowRecordResponseDto> getCurrentBorrowsByUserId(Long userId) {
         log.info("Получение текущих аренд пользователя: userId={}", userId);
+
+        accessControlService.checkUserAccess(userId);
 
         getUserEntityById(userId);
         List<BorrowRecord> borrowRecords = borrowRecordDao.findActiveByUserId(userId);
@@ -221,6 +235,8 @@ public class BorrowRecordServiceImpl implements BorrowRecordService {
     public List<BorrowRecordResponseDto> getBorrowHistoryByUserId(Long userId) {
         log.info("Получение истории аренды пользователя: userId={}", userId);
 
+        accessControlService.checkUserAccess(userId);
+
         getUserEntityById(userId);
         List<BorrowRecord> borrowRecords = borrowRecordDao.findByUserId(userId);
 
@@ -233,6 +249,8 @@ public class BorrowRecordServiceImpl implements BorrowRecordService {
     @Transactional(readOnly = true)
     public List<BorrowRecordResponseDto> getOverdueBorrowsByUserId(Long userId) {
         log.info("Получение просроченных аренд пользователя: userId={}", userId);
+
+        accessControlService.checkUserAccess(userId);
 
         getUserEntityById(userId);
 

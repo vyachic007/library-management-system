@@ -1,5 +1,7 @@
 package by.slava_borisov.library.config;
 
+import by.slava_borisov.library.security.CustomAccessDeniedHandler;
+import by.slava_borisov.library.security.CustomAuthenticationEntryPoint;
 import by.slava_borisov.library.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +29,8 @@ public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -53,10 +57,18 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
+
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler)
+                )
+
                 .authenticationProvider(authenticationProvider())
+
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(antMatcher("/api/auth/**")).permitAll()
 
@@ -92,7 +104,9 @@ public class SecurityConfig {
 
                         .anyRequest().authenticated()
                 )
+
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+
                 .build();
     }
 }

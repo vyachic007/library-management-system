@@ -46,4 +46,5 @@ public class Messages {
     public static final String INTERNAL_SERVER_ERROR = "Внутренняя ошибка сервера";
 
     public static final String ACCESS_DENIED = "Недостаточно прав для выполнения операции";
+    public static final String AUTHENTICATION_REQUIRED = "Требуется авторизация";
 }

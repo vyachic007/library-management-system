@@ -40,14 +40,14 @@ public class AuthorController {
 
     @GetMapping("/{authorId}")
     public AuthorResponseDto getAuthorById(
-            @PathVariable Long authorId
+            @PathVariable("authorId") Long authorId
     ) {
         return authorService.getById(authorId);
     }
 
     @PutMapping("/{authorId}")
     public AuthorResponseDto updateAuthor(
-            @PathVariable Long authorId,
+            @PathVariable("authorId") Long authorId,
             @Valid @RequestBody AuthorUpdateRequestDto request
     ) {
         return authorService.update(authorId, request);
@@ -56,7 +56,7 @@ public class AuthorController {
     @DeleteMapping("/{authorId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeAuthorById(
-            @PathVariable Long authorId
+            @PathVariable("authorId") Long authorId
     ) {
         authorService.delete(authorId);
     }

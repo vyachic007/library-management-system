@@ -32,14 +32,14 @@ public class BookController {
 
     @GetMapping("/isbn/{isbn}")
     public BookResponseDto getBookByIsbn(
-            @PathVariable String isbn
+            @PathVariable("isbn") String isbn
     ) {
         return bookService.getByIsbn(isbn);
     }
 
     @GetMapping("/category/{categoryId}")
     public List<BookResponseDto> getBooksByCategoryId(
-            @PathVariable Long categoryId
+            @PathVariable("categoryId") Long categoryId
     ) {
         return bookService.getByCategoryId(categoryId);
     }
@@ -59,35 +59,35 @@ public class BookController {
 
     @GetMapping("/author/{authorId}")
     public List<BookResponseDto> getBooksByAuthorId(
-            @PathVariable Long authorId
+            @PathVariable("authorId") Long authorId
     ) {
         return bookService.getByAuthorId(authorId);
     }
 
     @GetMapping("/{bookId}/details")
     public BookDetailsResponseDto getBookDetailsById(
-            @PathVariable Long bookId
+            @PathVariable("bookId") Long bookId
     ) {
         return bookService.getDetailsById(bookId);
     }
 
     @GetMapping("/{bookId}/available-copies")
     public List<BookCopyResponseDto> getAvailableCopies(
-            @PathVariable Long bookId
+            @PathVariable("bookId") Long bookId
     ) {
         return bookService.getAvailableCopies(bookId);
     }
 
     @GetMapping("/{bookId}")
     public BookResponseDto getBookById(
-            @PathVariable Long bookId
+            @PathVariable("bookId") Long bookId
     ) {
         return bookService.getById(bookId);
     }
 
     @PutMapping("/{bookId}")
     public BookResponseDto updateBook(
-            @PathVariable Long bookId,
+            @PathVariable("bookId") Long bookId,
             @Valid @RequestBody BookUpdateRequestDto request
     ) {
         return bookService.update(bookId, request);
@@ -96,7 +96,7 @@ public class BookController {
     @DeleteMapping("/{bookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeBookById(
-            @PathVariable Long bookId
+            @PathVariable("bookId") Long bookId
     ) {
         bookService.delete(bookId);
     }

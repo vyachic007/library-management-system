@@ -19,14 +19,14 @@ public class UserController {
 
     @GetMapping("/{userId}/profile")
     public UserResponseDto getProfile(
-            @PathVariable Long userId
+            @PathVariable("userId") Long userId
     ) {
         return userService.getProfile(userId);
     }
 
     @PutMapping("/{userId}/profile")
     public UserResponseDto updateProfile(
-            @PathVariable Long userId,
+            @PathVariable("userId") Long userId,
             @Valid @RequestBody UserUpdateRequestDto request
     ) {
         return userService.updateProfile(userId, request);
@@ -44,7 +44,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public UserResponseDto getUserById(
-            @PathVariable Long userId
+            @PathVariable("userId") Long userId
     ) {
         return userService.getById(userId);
     }
@@ -52,7 +52,7 @@ public class UserController {
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeUserById(
-            @PathVariable Long userId
+            @PathVariable("userId") Long userId
     ) {
         userService.delete(userId);
     }

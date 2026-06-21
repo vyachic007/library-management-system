@@ -3,6 +3,8 @@ package by.slava_borisov.library.exception;
 import by.slava_borisov.library.dto.response.ErrorResponseDto;
 import by.slava_borisov.library.dto.response.FieldErrorResponseDto;
 import by.slava_borisov.library.util.Messages;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -14,6 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -57,6 +60,14 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleEntityNotFoundException(
+            EntityNotFoundException ex,
+            WebRequest request
+    ) {
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage(), request);
+    }
+
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<ErrorResponseDto> handleValidationException(
             ValidationException ex,
@@ -84,11 +95,13 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.name(),
                 Messages.VALIDATION_ERROR,
-                request.getDescription(false).replace("uri=", ""),
+                extractPath(request),
                 fieldErrors
         );
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -108,6 +121,12 @@ public class GlobalExceptionHandler {
             Exception ex,
             WebRequest request
     ) {
+        log.error(
+                "Необработанная ошибка при выполнении запроса: path={}",
+                extractPath(request),
+                ex
+        );
+
         return buildResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 Messages.INTERNAL_SERVER_ERROR,
@@ -118,15 +137,24 @@ public class GlobalExceptionHandler {
     private ResponseEntity<ErrorResponseDto> buildResponse(
             HttpStatus status,
             String message,
-            WebRequest request) {
+            WebRequest request
+    ) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(
                 LocalDateTime.now(),
                 status.value(),
                 status.name(),
                 message,
-                request.getDescription(false).replace("uri=", ""),
+                extractPath(request),
                 List.of()
         );
-        return new ResponseEntity<>(errorResponse, status);
+
+        return ResponseEntity
+                .status(status)
+                .body(errorResponse);
+    }
+
+    private String extractPath(WebRequest request) {
+        return request.getDescription(false)
+                .replace("uri=", "");
     }
 }

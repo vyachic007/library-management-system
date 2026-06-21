@@ -109,6 +109,13 @@ public class SecurityConfig {
                         .requestMatchers(antMatcher(HttpMethod.POST, "/api/borrow-records/return")).hasAnyRole("USER", "ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.POST, "/api/borrow-records/*/extend")).hasAnyRole("USER", "ADMIN")
 
+                        .requestMatchers(
+                                antMatcher("/v3/api-docs/**"),
+                                antMatcher("/swagger-ui/**"),
+                                antMatcher("/swagger-ui.html"),
+                                antMatcher("/webjars/**")
+                        ).permitAll()
+
                         .anyRequest().authenticated()
                 )
 

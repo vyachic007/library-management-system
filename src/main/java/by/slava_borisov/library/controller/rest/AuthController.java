@@ -2,9 +2,12 @@ package by.slava_borisov.library.controller.rest;
 
 import by.slava_borisov.library.dto.request.UserLoginRequestDto;
 import by.slava_borisov.library.dto.request.UserRegistrationRequestDto;
+import by.slava_borisov.library.dto.response.ErrorResponseDto;
 import by.slava_borisov.library.dto.response.JwtAuthResponseDto;
 import by.slava_borisov.library.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,11 +38,23 @@ public class AuthController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Переданы некорректные данные"
+                    description = "Переданы некорректные данные",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(
+                                    implementation = ErrorResponseDto.class
+                            )
+                    )
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Неверный логин или пароль"
+                    description = "Неверный логин или пароль",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(
+                                    implementation = ErrorResponseDto.class
+                            )
+                    )
             )
     })
     @PostMapping("/login")
@@ -61,11 +76,23 @@ public class AuthController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Переданы некорректные регистрационные данные"
+                    description = "Переданы некорректные регистрационные данные",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(
+                                    implementation = ErrorResponseDto.class
+                            )
+                    )
             ),
             @ApiResponse(
                     responseCode = "409",
-                    description = "Пользователь с таким логином уже существует"
+                    description = "Пользователь с таким логином уже существует",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(
+                                    implementation = ErrorResponseDto.class
+                            )
+                    )
             )
     })
     @ResponseStatus(HttpStatus.CREATED)

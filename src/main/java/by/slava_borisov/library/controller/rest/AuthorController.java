@@ -3,9 +3,12 @@ package by.slava_borisov.library.controller.rest;
 import by.slava_borisov.library.dto.request.AuthorCreateRequestDto;
 import by.slava_borisov.library.dto.request.AuthorUpdateRequestDto;
 import by.slava_borisov.library.dto.response.AuthorResponseDto;
+import by.slava_borisov.library.dto.response.ErrorResponseDto;
 import by.slava_borisov.library.service.AuthorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -40,15 +43,27 @@ public class AuthorController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Переданы некорректные данные"
+                    description = "Переданы некорректные данные",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Операция доступна только администратору"
+                    description = "Операция доступна только администратору",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @PostMapping
@@ -58,6 +73,7 @@ public class AuthorController {
     ) {
         return authorService.create(request);
     }
+
 
     @Operation(
             summary = "Получить всех авторов",
@@ -70,17 +86,26 @@ public class AuthorController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра авторов"
+                    description = "Недостаточно прав для просмотра авторов",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping
     public List<AuthorResponseDto> getAllAuthors() {
         return authorService.getAll();
     }
+
 
     @Operation(
             summary = "Найти авторов по фамилии",
@@ -93,15 +118,27 @@ public class AuthorController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Фамилия автора не указана"
+                    description = "Фамилия автора не указана",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра авторов"
+                    description = "Недостаточно прав для просмотра авторов",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/search")
@@ -116,6 +153,7 @@ public class AuthorController {
         return authorService.getByLastName(lastName);
     }
 
+
     @Operation(
             summary = "Получить автора по идентификатору",
             description = "Возвращает информацию об авторе по его идентификатору"
@@ -127,15 +165,27 @@ public class AuthorController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра автора"
+                    description = "Недостаточно прав для просмотра автора",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Автор не найден"
+                    description = "Автор не найден",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/{authorId}")
@@ -149,6 +199,7 @@ public class AuthorController {
         return authorService.getById(authorId);
     }
 
+
     @Operation(
             summary = "Обновить автора",
             description = "Изменяет данные автора. Операция доступна только администратору"
@@ -160,19 +211,35 @@ public class AuthorController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Переданы некорректные данные"
+                    description = "Переданы некорректные данные",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Операция доступна только администратору"
+                    description = "Операция доступна только администратору",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Автор не найден"
+                    description = "Автор не найден",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @PutMapping("/{authorId}")
@@ -188,6 +255,7 @@ public class AuthorController {
         return authorService.update(authorId, request);
     }
 
+
     @Operation(
             summary = "Удалить автора",
             description = "Удаляет автора по идентификатору. Операция доступна только администратору"
@@ -199,19 +267,35 @@ public class AuthorController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Операция доступна только администратору"
+                    description = "Операция доступна только администратору",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Автор не найден"
+                    description = "Автор не найден",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "409",
-                    description = "Невозможно удалить автора, связанного с книгами"
+                    description = "Невозможно удалить автора, связанного с книгами",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @DeleteMapping("/{authorId}")

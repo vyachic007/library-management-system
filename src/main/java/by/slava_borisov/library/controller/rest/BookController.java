@@ -5,9 +5,12 @@ import by.slava_borisov.library.dto.request.BookUpdateRequestDto;
 import by.slava_borisov.library.dto.response.BookCopyResponseDto;
 import by.slava_borisov.library.dto.response.BookDetailsResponseDto;
 import by.slava_borisov.library.dto.response.BookResponseDto;
+import by.slava_borisov.library.dto.response.ErrorResponseDto;
 import by.slava_borisov.library.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -42,11 +45,19 @@ public class BookController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра книг"
+                    description = "Недостаточно прав для просмотра книг",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/search")
@@ -89,15 +100,27 @@ public class BookController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра книги"
+                    description = "Недостаточно прав для просмотра книги",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Книга с указанным ISBN не найдена"
+                    description = "Книга с указанным ISBN не найдена",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/isbn/{isbn}")
@@ -122,15 +145,27 @@ public class BookController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра книг"
+                    description = "Недостаточно прав для просмотра книг",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Категория не найдена"
+                    description = "Категория не найдена",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/category/{categoryId}")
@@ -155,23 +190,43 @@ public class BookController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Переданы некорректные данные"
+                    description = "Переданы некорректные данные",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Операция доступна только администратору"
+                    description = "Операция доступна только администратору",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Указанная категория или автор не найдены"
+                    description = "Указанная категория или автор не найдены",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "409",
-                    description = "Книга с таким ISBN уже существует"
+                    description = "Книга с таким ISBN уже существует",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @PostMapping
@@ -193,11 +248,19 @@ public class BookController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра книг"
+                    description = "Недостаточно прав для просмотра книг",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping
@@ -216,15 +279,27 @@ public class BookController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра книг"
+                    description = "Недостаточно прав для просмотра книг",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Автор не найден"
+                    description = "Автор не найден",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/author/{authorId}")
@@ -240,7 +315,7 @@ public class BookController {
 
     @Operation(
             summary = "Получить подробную информацию о книге",
-            description = "Возвращает сведения о книге вместе с авторами, категорией и экземплярами"
+            description = "Возвращает сведения о книге вместе с авторами и категорией"
     )
     @ApiResponses({
             @ApiResponse(
@@ -249,15 +324,27 @@ public class BookController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра книги"
+                    description = "Недостаточно прав для просмотра книги",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Книга не найдена"
+                    description = "Книга не найдена",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/{bookId}/details")
@@ -282,15 +369,27 @@ public class BookController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра экземпляров"
+                    description = "Недостаточно прав для просмотра экземпляров",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Книга не найдена"
+                    description = "Книга не найдена",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/{bookId}/available-copies")
@@ -315,15 +414,27 @@ public class BookController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра книги"
+                    description = "Недостаточно прав для просмотра книги",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Книга не найдена"
+                    description = "Книга не найдена",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/{bookId}")
@@ -348,23 +459,43 @@ public class BookController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Переданы некорректные данные"
+                    description = "Переданы некорректные данные",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Операция доступна только администратору"
+                    description = "Операция доступна только администратору",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Книга, категория или автор не найдены"
+                    description = "Книга, категория или автор не найдены",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "409",
-                    description = "Указанный ISBN уже используется другой книгой"
+                    description = "Указанный ISBN уже используется другой книгой",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @PutMapping("/{bookId}")
@@ -391,15 +522,35 @@ public class BookController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Операция доступна только администратору"
+                    description = "Операция доступна только администратору",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Книга не найдена"
+                    description = "Книга не найдена",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Невозможно удалить книгу, связанную с экземплярами или выдачами",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @DeleteMapping("/{bookId}")

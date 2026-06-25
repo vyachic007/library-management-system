@@ -4,9 +4,12 @@ import by.slava_borisov.library.dto.request.BorrowBookRequestDto;
 import by.slava_borisov.library.dto.request.ExtendBorrowRequestDto;
 import by.slava_borisov.library.dto.request.ReturnBookRequestDto;
 import by.slava_borisov.library.dto.response.BorrowRecordResponseDto;
+import by.slava_borisov.library.dto.response.ErrorResponseDto;
 import by.slava_borisov.library.service.BorrowRecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -41,23 +44,43 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Переданы некорректные данные"
+                    description = "Переданы некорректные данные",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для выдачи книги указанному пользователю"
+                    description = "Недостаточно прав для выдачи книги указанному пользователю",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Пользователь или экземпляр книги не найден"
+                    description = "Пользователь или экземпляр книги не найден",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "409",
-                    description = "Экземпляр книги недоступен для выдачи"
+                    description = "Экземпляр книги недоступен для выдачи",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @PostMapping("/rent")
@@ -79,23 +102,43 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Переданы некорректные данные"
+                    description = "Переданы некорректные данные",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для возврата указанной книги"
+                    description = "Недостаточно прав для возврата указанной книги",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Запись выдачи не найдена"
+                    description = "Запись выдачи не найдена",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "409",
-                    description = "Книга уже была возвращена"
+                    description = "Книга уже была возвращена",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @PostMapping("/return")
@@ -116,23 +159,43 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Передана некорректная дата возврата"
+                    description = "Передана некорректная дата возврата",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для продления этой выдачи"
+                    description = "Недостаточно прав для продления этой выдачи",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Запись выдачи не найдена"
+                    description = "Запись выдачи не найдена",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "409",
-                    description = "Невозможно продлить завершённую или просроченную выдачу"
+                    description = "Невозможно продлить завершённую или просроченную выдачу",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @PostMapping("/{recordId}/extend")
@@ -159,11 +222,19 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Операция доступна только администратору"
+                    description = "Операция доступна только администратору",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping
@@ -182,11 +253,19 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Операция доступна только администратору"
+                    description = "Операция доступна только администратору",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/active")
@@ -205,11 +284,19 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Операция доступна только администратору"
+                    description = "Операция доступна только администратору",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/overdue")
@@ -228,15 +315,27 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра выдач этого пользователя"
+                    description = "Недостаточно прав для просмотра выдач этого пользователя",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Пользователь не найден"
+                    description = "Пользователь не найден",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/user/{userId}")
@@ -261,15 +360,27 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра выдач этого пользователя"
+                    description = "Недостаточно прав для просмотра выдач этого пользователя",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Пользователь не найден"
+                    description = "Пользователь не найден",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/user/{userId}/current")
@@ -294,15 +405,27 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра истории этого пользователя"
+                    description = "Недостаточно прав для просмотра истории этого пользователя",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Пользователь не найден"
+                    description = "Пользователь не найден",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/user/{userId}/history")
@@ -327,15 +450,27 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра выдач этого пользователя"
+                    description = "Недостаточно прав для просмотра выдач этого пользователя",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Пользователь не найден"
+                    description = "Пользователь не найден",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/user/{userId}/overdue")
@@ -360,15 +495,27 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Операция доступна только администратору"
+                    description = "Операция доступна только администратору",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Экземпляр книги не найден"
+                    description = "Экземпляр книги не найден",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/book-copy/{copyId}")
@@ -393,15 +540,27 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Операция доступна только администратору"
+                    description = "Операция доступна только администратору",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Экземпляр книги не найден"
+                    description = "Экземпляр книги не найден",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/book-copy/{copyId}/history")
@@ -426,15 +585,27 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра этой записи"
+                    description = "Недостаточно прав для просмотра этой записи",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Запись выдачи не найдена"
+                    description = "Запись выдачи не найдена",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/{recordId}")

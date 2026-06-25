@@ -3,9 +3,12 @@ package by.slava_borisov.library.controller.rest;
 import by.slava_borisov.library.dto.request.CategoryCreateRequestDto;
 import by.slava_borisov.library.dto.request.CategoryUpdateRequestDto;
 import by.slava_borisov.library.dto.response.CategoryResponseDto;
+import by.slava_borisov.library.dto.response.ErrorResponseDto;
 import by.slava_borisov.library.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -40,23 +43,43 @@ public class CategoryController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Переданы некорректные данные"
+                    description = "Переданы некорректные данные",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Операция доступна только администратору"
+                    description = "Операция доступна только администратору",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Родительская категория не найдена"
+                    description = "Родительская категория не найдена",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "409",
-                    description = "Категория с таким названием уже существует"
+                    description = "Категория с таким названием уже существует",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @PostMapping
@@ -78,23 +101,43 @@ public class CategoryController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Переданы некорректные данные"
+                    description = "Переданы некорректные данные",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Операция доступна только администратору"
+                    description = "Операция доступна только администратору",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Категория или родительская категория не найдена"
+                    description = "Категория или родительская категория не найдена",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "409",
-                    description = "Категория с таким названием уже существует"
+                    description = "Категория с таким названием уже существует",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @PutMapping("/{categoryId}")
@@ -121,11 +164,19 @@ public class CategoryController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра категорий"
+                    description = "Недостаточно прав для просмотра категорий",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping
@@ -144,11 +195,19 @@ public class CategoryController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра категорий"
+                    description = "Недостаточно прав для просмотра категорий",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/root")
@@ -167,15 +226,27 @@ public class CategoryController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра категорий"
+                    description = "Недостаточно прав для просмотра категорий",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Родительская категория не найдена"
+                    description = "Родительская категория не найдена",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/{parentId}/subcategories")
@@ -200,15 +271,27 @@ public class CategoryController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра категории"
+                    description = "Недостаточно прав для просмотра категории",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Категория не найдена"
+                    description = "Категория не найдена",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/{categoryId}")
@@ -233,19 +316,35 @@ public class CategoryController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Операция доступна только администратору"
+                    description = "Операция доступна только администратору",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Категория не найдена"
+                    description = "Категория не найдена",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "409",
-                    description = "Невозможно удалить категорию, связанную с книгами или подкатегориями"
+                    description = "Невозможно удалить категорию, связанную с книгами или подкатегориями",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @DeleteMapping("/{categoryId}")

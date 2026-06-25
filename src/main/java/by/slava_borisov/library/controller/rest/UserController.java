@@ -1,10 +1,13 @@
 package by.slava_borisov.library.controller.rest;
 
 import by.slava_borisov.library.dto.request.UserUpdateRequestDto;
+import by.slava_borisov.library.dto.response.ErrorResponseDto;
 import by.slava_borisov.library.dto.response.UserResponseDto;
 import by.slava_borisov.library.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -39,15 +42,27 @@ public class UserController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра профиля"
+                    description = "Недостаточно прав для просмотра профиля",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Пользователь не найден"
+                    description = "Пользователь не найден",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/{userId}/profile")
@@ -72,19 +87,35 @@ public class UserController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Переданы некорректные данные"
+                    description = "Переданы некорректные данные",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для изменения профиля"
+                    description = "Недостаточно прав для изменения профиля",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Пользователь не найден"
+                    description = "Пользователь не найден",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @PutMapping("/{userId}/profile")
@@ -111,11 +142,19 @@ public class UserController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Операция доступна только администратору"
+                    description = "Операция доступна только администратору",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping
@@ -134,11 +173,19 @@ public class UserController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Операция доступна только администратору"
+                    description = "Операция доступна только администратору",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/active")
@@ -157,15 +204,27 @@ public class UserController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Операция доступна только администратору"
+                    description = "Операция доступна только администратору",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Пользователь не найден"
+                    description = "Пользователь не найден",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @GetMapping("/{userId}")
@@ -190,15 +249,35 @@ public class UserController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Пользователь не аутентифицирован"
+                    description = "Пользователь не аутентифицирован",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Операция доступна только администратору"
+                    description = "Операция доступна только администратору",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Пользователь не найден"
+                    description = "Пользователь не найден",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Невозможно удалить пользователя, связанного с записями выдачи",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @DeleteMapping("/{userId}")

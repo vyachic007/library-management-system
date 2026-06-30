@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -66,6 +67,7 @@ public class AuthorController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public AuthorResponseDto createAuthor(
@@ -101,6 +103,7 @@ public class AuthorController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping
     public List<AuthorResponseDto> getAllAuthors() {
         return authorService.getAll();
@@ -141,6 +144,7 @@ public class AuthorController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/search")
     public List<AuthorResponseDto> getAuthorsByLastName(
             @Parameter(
@@ -188,6 +192,7 @@ public class AuthorController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{authorId}")
     public AuthorResponseDto getAuthorById(
             @Parameter(
@@ -242,6 +247,7 @@ public class AuthorController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{authorId}")
     public AuthorResponseDto updateAuthor(
             @Parameter(
@@ -298,6 +304,7 @@ public class AuthorController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{authorId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeAuthorById(

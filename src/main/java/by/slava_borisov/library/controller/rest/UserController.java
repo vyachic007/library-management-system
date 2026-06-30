@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,6 +66,7 @@ public class UserController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{userId}/profile")
     public UserResponseDto getProfile(
             @Parameter(
@@ -75,6 +77,7 @@ public class UserController {
     ) {
         return userService.getProfile(userId);
     }
+
 
     @Operation(
             summary = "Обновить профиль пользователя",
@@ -118,6 +121,7 @@ public class UserController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PutMapping("/{userId}/profile")
     public UserResponseDto updateProfile(
             @Parameter(
@@ -130,6 +134,7 @@ public class UserController {
     ) {
         return userService.updateProfile(userId, request);
     }
+
 
     @Operation(
             summary = "Получить всех пользователей",
@@ -157,10 +162,12 @@ public class UserController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<UserResponseDto> getAllUsers() {
         return userService.getAll();
     }
+
 
     @Operation(
             summary = "Получить активных пользователей",
@@ -188,10 +195,12 @@ public class UserController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/active")
     public List<UserResponseDto> getAllActiveUsers() {
         return userService.getAllActiveUsers();
     }
+
 
     @Operation(
             summary = "Получить пользователя по идентификатору",
@@ -227,6 +236,7 @@ public class UserController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{userId}")
     public UserResponseDto getUserById(
             @Parameter(
@@ -237,6 +247,7 @@ public class UserController {
     ) {
         return userService.getById(userId);
     }
+
 
     @Operation(
             summary = "Удалить пользователя",
@@ -280,6 +291,7 @@ public class UserController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeUserById(

@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -82,6 +83,7 @@ public class CategoryController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryResponseDto createCategory(
@@ -89,6 +91,7 @@ public class CategoryController {
     ) {
         return categoryService.create(request);
     }
+
 
     @Operation(
             summary = "Обновить категорию",
@@ -140,6 +143,7 @@ public class CategoryController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{categoryId}")
     public CategoryResponseDto updateCategory(
             @Parameter(
@@ -152,6 +156,7 @@ public class CategoryController {
     ) {
         return categoryService.update(categoryId, request);
     }
+
 
     @Operation(
             summary = "Получить все категории",
@@ -179,10 +184,12 @@ public class CategoryController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping
     public List<CategoryResponseDto> getAllCategories() {
         return categoryService.getAll();
     }
+
 
     @Operation(
             summary = "Получить корневые категории",
@@ -210,10 +217,12 @@ public class CategoryController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/root")
     public List<CategoryResponseDto> getRootCategories() {
         return categoryService.getRootCategories();
     }
+
 
     @Operation(
             summary = "Получить подкатегории",
@@ -249,6 +258,7 @@ public class CategoryController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{parentId}/subcategories")
     public List<CategoryResponseDto> getSubcategoriesByParentId(
             @Parameter(
@@ -259,6 +269,7 @@ public class CategoryController {
     ) {
         return categoryService.getByParentId(parentId);
     }
+
 
     @Operation(
             summary = "Получить категорию по идентификатору",
@@ -294,6 +305,7 @@ public class CategoryController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{categoryId}")
     public CategoryResponseDto getCategoryById(
             @Parameter(
@@ -304,6 +316,7 @@ public class CategoryController {
     ) {
         return categoryService.getById(categoryId);
     }
+
 
     @Operation(
             summary = "Удалить категорию",
@@ -347,6 +360,7 @@ public class CategoryController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{categoryId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeCategoryById(

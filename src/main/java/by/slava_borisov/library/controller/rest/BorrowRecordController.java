@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class BorrowRecordController {
 
     @Operation(
             summary = "Выдать книгу пользователю",
-            description = "Создаёт запись о выдаче доступного экземпляра книги"
+            description = "Создаёт запись о выдаче доступного экземпляра книги. Операция доступна только администратору"
     )
     @ApiResponses({
             @ApiResponse(
@@ -60,7 +61,7 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для выдачи книги указанному пользователю",
+                    description = "Операция доступна только администратору",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponseDto.class)
@@ -83,6 +84,7 @@ public class BorrowRecordController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/rent")
     @ResponseStatus(HttpStatus.CREATED)
     public BorrowRecordResponseDto borrowBook(
@@ -91,9 +93,10 @@ public class BorrowRecordController {
         return borrowRecordService.borrowBook(request);
     }
 
+
     @Operation(
             summary = "Вернуть книгу",
-            description = "Закрывает активную запись выдачи и возвращает экземпляру статус доступного"
+            description = "Закрывает активную запись выдачи и возвращает экземпляру статус доступного. Операция доступна только администратору"
     )
     @ApiResponses({
             @ApiResponse(
@@ -118,7 +121,7 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для возврата указанной книги",
+                    description = "Операция доступна только администратору",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponseDto.class)
@@ -141,6 +144,7 @@ public class BorrowRecordController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/return")
     public BorrowRecordResponseDto returnBook(
             @Valid @RequestBody ReturnBookRequestDto request
@@ -148,9 +152,10 @@ public class BorrowRecordController {
         return borrowRecordService.returnBook(request);
     }
 
+
     @Operation(
             summary = "Продлить срок выдачи",
-            description = "Изменяет дату планового возврата активной записи выдачи"
+            description = "Изменяет дату планового возврата активной записи выдачи. Операция доступна только администратору"
     )
     @ApiResponses({
             @ApiResponse(
@@ -175,7 +180,7 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для продления этой выдачи",
+                    description = "Операция доступна только администратору",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponseDto.class)
@@ -198,6 +203,7 @@ public class BorrowRecordController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{recordId}/extend")
     public BorrowRecordResponseDto extendBorrowPeriod(
             @Parameter(
@@ -210,6 +216,7 @@ public class BorrowRecordController {
     ) {
         return borrowRecordService.extendBorrowPeriod(recordId, request);
     }
+
 
     @Operation(
             summary = "Получить все записи выдачи",
@@ -237,10 +244,12 @@ public class BorrowRecordController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<BorrowRecordResponseDto> getAllBorrowRecords() {
         return borrowRecordService.getAll();
     }
+
 
     @Operation(
             summary = "Получить все активные выдачи",
@@ -268,10 +277,12 @@ public class BorrowRecordController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/active")
     public List<BorrowRecordResponseDto> getCurrentBorrows() {
         return borrowRecordService.getCurrentBorrows();
     }
+
 
     @Operation(
             summary = "Получить все просроченные выдачи",
@@ -299,14 +310,16 @@ public class BorrowRecordController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/overdue")
     public List<BorrowRecordResponseDto> getOverdueBorrows() {
         return borrowRecordService.getOverdueBorrows();
     }
 
+
     @Operation(
             summary = "Получить выдачи пользователя",
-            description = "Возвращает все записи выдачи указанного пользователя"
+            description = "Возвращает все записи выдачи указанного пользователя. Операция доступна только администратору"
     )
     @ApiResponses({
             @ApiResponse(
@@ -323,7 +336,7 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра выдач этого пользователя",
+                    description = "Операция доступна только администратору",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponseDto.class)
@@ -338,6 +351,7 @@ public class BorrowRecordController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/user/{userId}")
     public List<BorrowRecordResponseDto> getBorrowRecordsByUserId(
             @Parameter(
@@ -349,9 +363,10 @@ public class BorrowRecordController {
         return borrowRecordService.getByUserId(userId);
     }
 
+
     @Operation(
             summary = "Получить активные выдачи пользователя",
-            description = "Возвращает текущие активные выдачи указанного пользователя"
+            description = "Возвращает текущие активные выдачи указанного пользователя. Операция доступна только администратору"
     )
     @ApiResponses({
             @ApiResponse(
@@ -368,7 +383,7 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра выдач этого пользователя",
+                    description = "Операция доступна только администратору",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponseDto.class)
@@ -383,6 +398,7 @@ public class BorrowRecordController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/user/{userId}/current")
     public List<BorrowRecordResponseDto> getCurrentBorrowsByUserId(
             @Parameter(
@@ -394,9 +410,10 @@ public class BorrowRecordController {
         return borrowRecordService.getCurrentBorrowsByUserId(userId);
     }
 
+
     @Operation(
             summary = "Получить историю выдач пользователя",
-            description = "Возвращает завершённые записи выдачи указанного пользователя"
+            description = "Возвращает завершённые записи выдачи указанного пользователя. Операция доступна только администратору"
     )
     @ApiResponses({
             @ApiResponse(
@@ -413,7 +430,7 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра истории этого пользователя",
+                    description = "Операция доступна только администратору",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponseDto.class)
@@ -428,6 +445,7 @@ public class BorrowRecordController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/user/{userId}/history")
     public List<BorrowRecordResponseDto> getBorrowHistoryByUserId(
             @Parameter(
@@ -439,9 +457,10 @@ public class BorrowRecordController {
         return borrowRecordService.getBorrowHistoryByUserId(userId);
     }
 
+
     @Operation(
             summary = "Получить просроченные выдачи пользователя",
-            description = "Возвращает просроченные выдачи указанного пользователя"
+            description = "Возвращает просроченные выдачи указанного пользователя. Операция доступна только администратору"
     )
     @ApiResponses({
             @ApiResponse(
@@ -458,7 +477,7 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра выдач этого пользователя",
+                    description = "Операция доступна только администратору",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponseDto.class)
@@ -473,6 +492,7 @@ public class BorrowRecordController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/user/{userId}/overdue")
     public List<BorrowRecordResponseDto> getOverdueBorrowsByUserId(
             @Parameter(
@@ -483,6 +503,7 @@ public class BorrowRecordController {
     ) {
         return borrowRecordService.getOverdueBorrowsByUserId(userId);
     }
+
 
     @Operation(
             summary = "Получить выдачи экземпляра книги",
@@ -518,6 +539,7 @@ public class BorrowRecordController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/book-copy/{copyId}")
     public List<BorrowRecordResponseDto> getBorrowRecordsByBookCopyId(
             @Parameter(
@@ -528,6 +550,7 @@ public class BorrowRecordController {
     ) {
         return borrowRecordService.getByBookCopyId(copyId);
     }
+
 
     @Operation(
             summary = "Получить историю экземпляра книги",
@@ -563,6 +586,7 @@ public class BorrowRecordController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/book-copy/{copyId}/history")
     public List<BorrowRecordResponseDto> getBorrowHistoryByBookCopyId(
             @Parameter(
@@ -574,9 +598,10 @@ public class BorrowRecordController {
         return borrowRecordService.getBorrowHistoryByBookCopyId(copyId);
     }
 
+
     @Operation(
             summary = "Получить запись выдачи по идентификатору",
-            description = "Возвращает подробную информацию о записи выдачи"
+            description = "Возвращает подробную информацию о записи выдачи. Операция доступна только администратору"
     )
     @ApiResponses({
             @ApiResponse(
@@ -593,7 +618,7 @@ public class BorrowRecordController {
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Недостаточно прав для просмотра этой записи",
+                    description = "Операция доступна только администратору",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponseDto.class)
@@ -608,6 +633,7 @@ public class BorrowRecordController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{recordId}")
     public BorrowRecordResponseDto getBorrowRecordById(
             @Parameter(

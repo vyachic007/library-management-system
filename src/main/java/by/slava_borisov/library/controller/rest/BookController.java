@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -60,6 +61,7 @@ public class BookController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/search")
     public List<BookResponseDto> searchBooks(
             @Parameter(
@@ -88,6 +90,7 @@ public class BookController {
     ) {
         return bookService.search(title, author, categoryId, isbn);
     }
+
 
     @Operation(
             summary = "Получить книгу по ISBN",
@@ -123,6 +126,7 @@ public class BookController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/isbn/{isbn}")
     public BookResponseDto getBookByIsbn(
             @Parameter(
@@ -168,6 +172,7 @@ public class BookController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/category/{categoryId}")
     public List<BookResponseDto> getBooksByCategoryId(
             @Parameter(
@@ -178,6 +183,7 @@ public class BookController {
     ) {
         return bookService.getByCategoryId(categoryId);
     }
+
 
     @Operation(
             summary = "Создать книгу",
@@ -229,6 +235,7 @@ public class BookController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BookResponseDto createBook(
@@ -236,6 +243,7 @@ public class BookController {
     ) {
         return bookService.create(request);
     }
+
 
     @Operation(
             summary = "Получить все книги",
@@ -263,10 +271,12 @@ public class BookController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping
     public List<BookResponseDto> getAllBooks() {
         return bookService.getAll();
     }
+
 
     @Operation(
             summary = "Получить книги автора",
@@ -302,6 +312,7 @@ public class BookController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/author/{authorId}")
     public List<BookResponseDto> getBooksByAuthorId(
             @Parameter(
@@ -312,6 +323,7 @@ public class BookController {
     ) {
         return bookService.getByAuthorId(authorId);
     }
+
 
     @Operation(
             summary = "Получить подробную информацию о книге",
@@ -347,6 +359,7 @@ public class BookController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{bookId}/details")
     public BookDetailsResponseDto getBookDetailsById(
             @Parameter(
@@ -357,6 +370,7 @@ public class BookController {
     ) {
         return bookService.getDetailsById(bookId);
     }
+
 
     @Operation(
             summary = "Получить доступные экземпляры книги",
@@ -392,6 +406,7 @@ public class BookController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{bookId}/available-copies")
     public List<BookCopyResponseDto> getAvailableCopies(
             @Parameter(
@@ -402,6 +417,7 @@ public class BookController {
     ) {
         return bookService.getAvailableCopies(bookId);
     }
+
 
     @Operation(
             summary = "Получить книгу по идентификатору",
@@ -437,6 +453,7 @@ public class BookController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{bookId}")
     public BookResponseDto getBookById(
             @Parameter(
@@ -447,6 +464,7 @@ public class BookController {
     ) {
         return bookService.getById(bookId);
     }
+
 
     @Operation(
             summary = "Обновить книгу",
@@ -498,6 +516,7 @@ public class BookController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{bookId}")
     public BookResponseDto updateBook(
             @Parameter(
@@ -510,6 +529,7 @@ public class BookController {
     ) {
         return bookService.update(bookId, request);
     }
+
 
     @Operation(
             summary = "Удалить книгу",
@@ -553,6 +573,7 @@ public class BookController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{bookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeBookById(

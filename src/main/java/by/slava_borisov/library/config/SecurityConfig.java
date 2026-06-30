@@ -6,10 +6,10 @@ import by.slava_borisov.library.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -24,6 +24,7 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -71,43 +72,6 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(antMatcher("/api/auth/**")).permitAll()
-
-                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/books/**")).hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/books/**")).hasRole("ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.PUT, "/api/books/**")).hasRole("ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.DELETE, "/api/books/**")).hasRole("ADMIN")
-
-                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/authors/**")).hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/authors/**")).hasRole("ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.PUT, "/api/authors/**")).hasRole("ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.DELETE, "/api/authors/**")).hasRole("ADMIN")
-
-                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/categories/**")).hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/categories/**")).hasRole("ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.PUT, "/api/categories/**")).hasRole("ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.DELETE, "/api/categories/**")).hasRole("ADMIN")
-
-                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/book-copies/**")).hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/book-copies/**")).hasRole("ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.PUT, "/api/book-copies/**")).hasRole("ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.PATCH, "/api/book-copies/**")).hasRole("ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.DELETE, "/api/book-copies/**")).hasRole("ADMIN")
-
-                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/users/*/profile")).hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.PUT, "/api/users/*/profile")).hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(antMatcher("/api/users/**")).hasRole("ADMIN")
-
-                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/borrow-records")).hasRole("ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/borrow-records/active")).hasRole("ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/borrow-records/overdue")).hasRole("ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/borrow-records/book-copy/**")).hasRole("ADMIN")
-
-                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/borrow-records/user/**")).hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/borrow-records/*")).hasAnyRole("USER", "ADMIN")
-
-                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/borrow-records/rent")).hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/borrow-records/return")).hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/borrow-records/*/extend")).hasAnyRole("USER", "ADMIN")
 
                         .requestMatchers(
                                 antMatcher("/v3/api-docs/**"),

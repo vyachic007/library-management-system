@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -83,6 +84,7 @@ public class BookCopyController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BookCopyResponseDto createBookCopy(
@@ -90,6 +92,7 @@ public class BookCopyController {
     ) {
         return bookCopyService.create(request);
     }
+
 
     @Operation(
             summary = "Получить все экземпляры книг",
@@ -117,10 +120,12 @@ public class BookCopyController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping
     public List<BookCopyResponseDto> getAllBookCopies() {
         return bookCopyService.getAll();
     }
+
 
     @Operation(
             summary = "Получить экземпляры по статусу",
@@ -156,6 +161,7 @@ public class BookCopyController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/status/{status}")
     public List<BookCopyResponseDto> getBookCopiesByStatus(
             @Parameter(
@@ -166,6 +172,7 @@ public class BookCopyController {
     ) {
         return bookCopyService.getByStatus(status);
     }
+
 
     @Operation(
             summary = "Получить экземпляр по инвентарному номеру",
@@ -201,6 +208,7 @@ public class BookCopyController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/inventory/{inventoryNumber}")
     public BookCopyResponseDto getBookCopyByInventoryNumber(
             @Parameter(
@@ -211,6 +219,7 @@ public class BookCopyController {
     ) {
         return bookCopyService.getByInventoryNumber(inventoryNumber);
     }
+
 
     @Operation(
             summary = "Получить экземпляры указанной книги",
@@ -246,6 +255,7 @@ public class BookCopyController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/book/{bookId}")
     public List<BookCopyResponseDto> getBookCopiesByBookId(
             @Parameter(
@@ -256,6 +266,7 @@ public class BookCopyController {
     ) {
         return bookCopyService.getByBookId(bookId);
     }
+
 
     @Operation(
             summary = "Получить доступные экземпляры книги",
@@ -291,6 +302,7 @@ public class BookCopyController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/book/{bookId}/available")
     public List<BookCopyResponseDto> getAvailableBookCopiesByBookId(
             @Parameter(
@@ -301,6 +313,7 @@ public class BookCopyController {
     ) {
         return bookCopyService.getAvailableByBookId(bookId);
     }
+
 
     @Operation(
             summary = "Получить экземпляр по идентификатору",
@@ -336,6 +349,7 @@ public class BookCopyController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{copyId}")
     public BookCopyResponseDto getBookCopyById(
             @Parameter(
@@ -346,6 +360,7 @@ public class BookCopyController {
     ) {
         return bookCopyService.getById(copyId);
     }
+
 
     @Operation(
             summary = "Обновить экземпляр книги",
@@ -397,6 +412,7 @@ public class BookCopyController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{copyId}")
     public BookCopyResponseDto updateBookCopy(
             @Parameter(
@@ -409,6 +425,7 @@ public class BookCopyController {
     ) {
         return bookCopyService.update(copyId, request);
     }
+
 
     @Operation(
             summary = "Изменить статус экземпляра",
@@ -460,6 +477,7 @@ public class BookCopyController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{copyId}/status")
     public BookCopyResponseDto changeBookCopyStatus(
             @Parameter(
@@ -472,6 +490,7 @@ public class BookCopyController {
     ) {
         return bookCopyService.changeStatus(copyId, request);
     }
+
 
     @Operation(
             summary = "Удалить экземпляр книги",
@@ -515,6 +534,7 @@ public class BookCopyController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{copyId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeBookCopyById(

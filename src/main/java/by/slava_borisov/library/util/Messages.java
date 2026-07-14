@@ -1,6 +1,6 @@
 package by.slava_borisov.library.util;
 
-public class Messages {
+public final class Messages {
 
     private Messages() {
     }

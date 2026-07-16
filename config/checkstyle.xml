@@ -102,7 +102,6 @@
 
     </module>
 
-    <!-- ИСПРАВЛЕНО: добавлен путь config/ -->
     <module name="SuppressionFilter">
         <property name="file" value="config/suppressions.xml"/>
     </module>

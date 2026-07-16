@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Тесты BorrowRecordServiceImpl")
 class BorrowRecordServiceImplTest {
 
     @Mock

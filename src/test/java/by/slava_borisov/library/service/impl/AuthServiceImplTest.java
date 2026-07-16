@@ -35,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Тесты AuthServiceImpl")
 class AuthServiceImplTest {
 
     @Mock

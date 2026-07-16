@@ -6,7 +6,6 @@
 [![Tomcat](https://img.shields.io/badge/Tomcat-10.1-yellow?logo=apachetomcat)](https://tomcat.apache.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker)](https://www.docker.com/)
 [![Swagger](https://img.shields.io/badge/Swagger-UI-85EA2D?logo=swagger)](https://swagger.io/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 **Полнофункциональная система управления библиотекой** — RESTful API приложение на Java 17 с детальным логированием, гибким поиском, управлением выдачей книг и контролем сроков возврата.
 
